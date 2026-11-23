@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import type { Dict } from "@/dictionaries";
 
 // One colour per card, in content order: format, schedule, method, reschedule.
-const THEMES = ["card--paper", "card--blue", "card--yellow", "card--mist"];
+const THEMES = ["card--paper", "card--brand", "card--accent", "card--mist"];
 
 /** Cards are sticky and overlap as you scroll — each new one slides over the previous. */
 export function Benefits({ dict, otherLang }: { dict: Dict; otherLang: string }) {

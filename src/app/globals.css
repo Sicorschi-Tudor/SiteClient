@@ -5,37 +5,37 @@
    Components read only semantic / component tokens, so a block can be
    re-themed by re-pointing the semantic layer (see `.brand`).
 
-   Principles: white page, one action colour (cobalt), one attention
-   colour (yellow, used sparingly), hairlines instead of shadows,
+   Principles: white page, one action colour (forest green), one attention
+   colour (coral, used sparingly), hairlines instead of shadows,
    a strict 12-column grid, small consistent radii.
    ===================================================================== */
 
 /* ---------- 1. PRIMITIVES ---------- */
 :root {
   --white: #ffffff;
-  --mist-50: #f6f7f9;
-  --mist-200: #e3e5ec;
-  --mist-500: #858aa3;
-  --ink-500: #5b5f7a;
-  --ink-700: #2a2d45;
-  --ink-900: #0e1020;
+  --mist-50: #f5f7f4;
+  --mist-200: #e1e7e2;
+  --mist-500: #7e8c84;
+  --ink-500: #5a6962;
+  --ink-700: #2c3833;
+  --ink-900: #111614;
 
-  --blue-50: #eef0ff;
-  --blue-600: #2b44ff;
-  --blue-700: #1e30d6;
+  --green-50: #e6f2ec;
+  --green-600: #064e3b;
+  --green-700: #043a2c;
 
-  --yellow-400: #ffd83d;
-  --yellow-500: #f5c400;
+  --coral-400: #ff7f5c;
+  --coral-500: #f2643c;
 
-  --coral-700: #c9301a;
-  --mint-600: #0c7d3e;
+  --red-700: #c9301a;
+  --mint-600: #0b7a4b;
 
   --r-sm: 0.5rem;
   --r-md: 0.875rem;
   --r-lg: 1.25rem;
 
-  --shadow-sm: 0 1px 2px rgb(14 16 32 / 0.06);
-  --shadow-md: 0 1px 2px rgb(14 16 32 / 0.05), 0 12px 32px -8px rgb(14 16 32 / 0.14);
+  --shadow-sm: 0 1px 2px rgb(17 22 20 / 0.06);
+  --shadow-md: 0 1px 2px rgb(17 22 20 / 0.05), 0 12px 32px -8px rgb(17 22 20 / 0.14);
 
   --fs-hero: clamp(1.9rem, min(9vw, 13vh), 6.75rem);
   --fs-h2: clamp(1.5rem, 1.05rem + 2.1vw, 2.75rem);
@@ -57,13 +57,13 @@
   --color-text: var(--ink-900);
   --color-text-muted: var(--ink-500);
   --color-border: var(--mist-200);
-  --color-primary: var(--blue-600);
-  --color-primary-hover: var(--blue-700);
+  --color-primary: var(--green-600);
+  --color-primary-hover: var(--green-700);
   --color-on-primary: var(--white);
-  --color-accent: var(--yellow-400);
+  --color-accent: var(--coral-400);
   --color-on-accent: var(--ink-900);
-  --color-danger: var(--coral-700);
-  --color-focus: var(--blue-600);
+  --color-danger: var(--red-700);
+  --color-focus: var(--green-600);
 
   --font-display: var(--font-unbounded), "Arial Black", system-ui, sans-serif;
   --font-body: var(--font-onest), system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -74,16 +74,16 @@
   --header-h: 4.25rem;
 }
 
-/* Brand block: same components on a cobalt field. */
+/* Brand block: same components on a forest-green field. */
 .brand {
-  --color-bg: var(--blue-600);
-  --color-surface: var(--blue-700);
-  --color-subtle: var(--blue-700);
+  --color-bg: var(--green-600);
+  --color-surface: var(--green-700);
+  --color-subtle: var(--green-700);
   --color-text: var(--white);
   --color-text-muted: rgb(255 255 255 / 0.9);
   --color-border: rgb(255 255 255 / 0.26);
   --color-danger: var(--white);
-  --color-focus: var(--yellow-400);
+  --color-focus: var(--coral-400);
   background: var(--color-bg);
   color: var(--color-text);
 }
@@ -128,7 +128,7 @@ body {
   overflow-x: clip;
 }
 ::selection {
-  background: var(--yellow-400);
+  background: var(--coral-400);
   color: var(--ink-900);
 }
 :focus-visible {
@@ -243,9 +243,9 @@ a {
   opacity: 0.7;
 }
 .btn--accent {
-  --button-bg: var(--yellow-400);
+  --button-bg: var(--coral-400);
   --button-fg: var(--ink-900);
-  --button-bg-hover: var(--yellow-500);
+  --button-bg-hover: var(--coral-500);
 }
 .btn--ghost {
   --button-bg: transparent;
@@ -491,7 +491,7 @@ a {
   }
 }
 /* The headline is the image: it spans the full grid, and its last line sits on a
-   yellow slab that runs off the right edge of the screen. */
+   coral slab that runs off the right edge of the screen. */
 .hero__h1 {
   margin-top: clamp(1rem, 2vw, 1.75rem);
   font-family: var(--font-display);
@@ -763,7 +763,7 @@ a {
 }
 @media (hover: hover) {
   .rail__opt:not(:has(input:checked)):hover {
-    background: var(--blue-50);
+    background: var(--green-50);
   }
 }
 .rail__hint {
@@ -791,7 +791,7 @@ a {
     grid-column: 1 / span 6;
     padding-top: 0.5rem;
   }
-  /* The card climbs onto the yellow slab. */
+  /* The card climbs onto the coral slab. */
   .lesson {
     grid-column: 8 / span 5;
     justify-self: end;
@@ -800,7 +800,7 @@ a {
   }
 }
 
-/* Clocks — a full-bleed cobalt band with the live time in every Russian time zone. */
+/* Clocks — a full-bleed green band with the live time in every Russian time zone. */
 .clocks {
   padding-block: clamp(2.25rem, 4vw, 3.5rem);
 }
@@ -879,7 +879,7 @@ a {
   width: 0.4rem;
   height: 0.4rem;
   margin-right: 0.35rem;
-  background: var(--yellow-400);
+  background: var(--coral-400);
   vertical-align: 0.05em;
 }
 .zone[data-open="false"] .zone__off::before {
@@ -893,7 +893,7 @@ a {
   color: var(--ink-700);
 }
 .zone[data-you="true"] {
-  background: var(--yellow-400);
+  background: var(--coral-400);
   color: var(--ink-900);
   padding-left: 0.75rem;
 }
@@ -938,7 +938,7 @@ a {
   width: 3px;
   height: calc(clamp(0.75rem, 1.6vw, 1.25rem) + 0.8rem);
   margin-left: -3px;
-  background: var(--yellow-400);
+  background: var(--coral-400);
   box-shadow: 0 0 0 1px var(--ink-900);
 }
 .ruler__bar {
@@ -961,7 +961,7 @@ a {
 .trialbox:has(.trial li:nth-child(2):hover) .ruler__bar span:nth-child(2),
 .trialbox:has(.trial li:nth-child(3):hover) .ruler__bar span:nth-child(3),
 .trialbox:has(.trial li:nth-child(4):hover) .ruler__bar span:nth-child(4) {
-  background: var(--yellow-400);
+  background: var(--coral-400);
 }
 @media (hover: hover) {
   .trial li {
@@ -1119,19 +1119,19 @@ a {
   /* clip, not hidden: `hidden` would make the card a scroll container and freeze view() timelines inside it */
   overflow: clip;
 }
-.card--blue {
-  --card-bg: var(--blue-600);
+.card--brand {
+  --card-bg: var(--green-600);
   --card-fg: var(--white);
   --card-soft: rgb(255 255 255 / 0.9);
-  --card-glyph: var(--yellow-400);
+  --card-glyph: var(--coral-400);
   --card-mark: var(--white);
   --card-track: rgb(255 255 255 / 0.28);
 }
-.card--yellow {
-  --card-bg: var(--yellow-400);
+.card--accent {
+  --card-bg: var(--coral-400);
   --card-glyph: var(--ink-900);
   --card-mark: var(--ink-900);
-  --card-track: rgb(14 16 32 / 0.16);
+  --card-track: rgb(17 22 20 / 0.16);
 }
 .card--mist {
   --card-bg: var(--mist-50);
@@ -1299,7 +1299,7 @@ a {
   transform: translateX(-18%);
 }
 .kinetic p:nth-child(2) b::after {
-  background: var(--yellow-400);
+  background: var(--coral-400);
 }
 
 /* =====================================================================
@@ -1333,7 +1333,7 @@ a {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(16rem circle at var(--mx, 50%) var(--my, 0%), var(--ticket-light, rgb(43 68 255 / 0.1)), transparent 70%);
+  background: radial-gradient(16rem circle at var(--mx, 50%) var(--my, 0%), var(--ticket-light, rgb(6 78 59 / 0.1)), transparent 70%);
   opacity: 0;
   transition: opacity var(--dur-base) linear;
   pointer-events: none;
@@ -1351,12 +1351,12 @@ a {
 }
 .ticket--feat {
   --ticket-light: rgb(255 255 255 / 0.22);
-  --color-surface: var(--blue-600);
+  --color-surface: var(--green-600);
   --color-text: var(--white);
   --color-text-muted: rgb(255 255 255 / 0.86);
   --color-border: rgb(255 255 255 / 0.26);
-  --color-focus: var(--yellow-400);
-  border-color: var(--blue-600);
+  --color-focus: var(--coral-400);
+  border-color: var(--green-600);
 }
 @media (hover: hover) {
   .ticket:hover {
@@ -1368,8 +1368,8 @@ a {
   box-shadow: 0 0 0 1px var(--ink-900);
 }
 .ticket--feat[data-selected="true"] {
-  border-color: var(--yellow-400);
-  box-shadow: 0 0 0 2px var(--yellow-400);
+  border-color: var(--coral-400);
+  box-shadow: 0 0 0 2px var(--coral-400);
 }
 .ticket__top {
   display: flex;
@@ -1385,7 +1385,7 @@ a {
 .ticket__tag {
   padding: 0.25rem 0.6rem;
   border-radius: var(--r-sm);
-  background: var(--yellow-400);
+  background: var(--coral-400);
   color: var(--ink-900);
   font-size: 0.75rem;
   font-weight: 600;
@@ -1447,7 +1447,7 @@ a {
     center / contain no-repeat;
 }
 .ticket--feat .ticket__list li::before {
-  background: var(--yellow-400);
+  background: var(--coral-400);
 }
 .ticket__cta {
   margin-top: auto;
@@ -1465,7 +1465,7 @@ a {
   pointer-events: none;
 }
 .ticket--feat .stamp {
-  background: var(--yellow-400);
+  background: var(--coral-400);
   color: var(--ink-900);
 }
 @media (min-width: 64rem) {
@@ -1490,7 +1490,7 @@ a {
   font-size: clamp(4.5rem, 2rem + 13vw, 11rem);
   line-height: 0.95;
   letter-spacing: -0.06em;
-  color: var(--yellow-400);
+  color: var(--coral-400);
   white-space: nowrap;
 }
 .signup__grid {
@@ -1513,8 +1513,8 @@ a {
   --color-text: var(--ink-900);
   --color-text-muted: var(--ink-500);
   --color-border: var(--mist-200);
-  --color-danger: var(--coral-700);
-  --color-focus: var(--blue-600);
+  --color-danger: var(--red-700);
+  --color-focus: var(--green-600);
 }
 .gap {
   display: grid;
@@ -1555,22 +1555,22 @@ a {
   }
 }
 .field:focus-visible {
-  outline: 3px solid var(--blue-600);
+  outline: 3px solid var(--green-600);
   outline-offset: 1px;
-  border-color: var(--blue-600);
+  border-color: var(--green-600);
 }
 select.field {
   padding-right: 2.5rem;
   cursor: pointer;
   text-overflow: ellipsis;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230e1020' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 6l4.5 4.5L12.5 6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23111614' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 6l4.5 4.5L12.5 6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.9rem center;
   background-size: 1rem;
 }
 .field[aria-invalid="true"] {
-  border-color: var(--coral-700);
-  box-shadow: 0 0 0 1px var(--coral-700);
+  border-color: var(--red-700);
+  box-shadow: 0 0 0 1px var(--red-700);
 }
 .gap__hint,
 .gap__err {
@@ -1622,15 +1622,15 @@ select.field {
   transition: transform var(--dur-fast) var(--ease-out);
 }
 .consent input:checked {
-  background: var(--blue-600);
-  border-color: var(--blue-600);
+  background: var(--green-600);
+  border-color: var(--green-600);
 }
 .consent input:checked::after {
   transform: translateY(-0.08rem) rotate(-45deg) scale(1);
 }
 .consent input[aria-invalid="true"] {
-  border-color: var(--coral-700);
-  box-shadow: 0 0 0 1px var(--coral-700);
+  border-color: var(--red-700);
+  box-shadow: 0 0 0 1px var(--red-700);
 }
 .consent a {
   color: var(--ink-900);
@@ -1727,7 +1727,7 @@ select.field {
   box-shadow: var(--shadow-md);
 }
 .thanks::backdrop {
-  background: rgb(14 16 32 / 0.55);
+  background: rgb(17 22 20 / 0.55);
 }
 .thanks__ok {
   display: grid;
@@ -1930,10 +1930,10 @@ select.field {
 }
 
 /* =====================================================================
-   LEVEL TEST — the one full-bleed yellow moment
+   LEVEL TEST — the one full-bleed coral moment
    ===================================================================== */
 .quizsec {
-  background: var(--yellow-400);
+  background: var(--coral-400);
   color: var(--ink-900);
   padding-block: var(--section-pad);
   --color-focus: var(--ink-900);
@@ -1952,7 +1952,7 @@ select.field {
 }
 .quizsec__head p:last-child {
   max-width: 26rem;
-  color: rgb(14 16 32 / 0.8);
+  color: rgb(17 22 20 / 0.8);
 }
 .quiz {
   display: flex;
@@ -1962,7 +1962,7 @@ select.field {
   background: var(--white);
   border: 1.5px solid var(--ink-900);
   border-radius: var(--r-md);
-  --color-focus: var(--blue-600);
+  --color-focus: var(--green-600);
 }
 .quiz__top {
   display: flex;
@@ -2008,7 +2008,7 @@ select.field {
   margin-inline: 0.15em;
   vertical-align: -0.1em;
   border-bottom: 3px solid var(--color-primary);
-  background: var(--blue-50);
+  background: var(--green-50);
 }
 .quiz__sentence:focus,
 .quiz__level:focus {
@@ -2050,8 +2050,8 @@ select.field {
   color: var(--white);
 }
 .quiz__opt[data-state="wrong"] {
-  background: var(--coral-700);
-  border-color: var(--coral-700);
+  background: var(--red-700);
+  border-color: var(--red-700);
   color: var(--white);
 }
 .quiz__opt[data-state="off"] {
@@ -2059,7 +2059,7 @@ select.field {
 }
 .quiz__fill {
   padding: 0 0.2em;
-  background: var(--yellow-400);
+  background: var(--coral-400);
   color: var(--ink-900);
 }
 .quiz__opt:active {
@@ -2223,7 +2223,7 @@ html:has(.cookie) {
   padding-left: 1.5rem;
 }
 .legal mark {
-  background: #fff4c2;
+  background: #ffe4da;
   color: inherit;
   padding: 0 0.2em;
 }
@@ -2235,7 +2235,7 @@ html:has(.cookie) {
   font-size: var(--fs-small);
 }
 .legal a {
-  color: var(--blue-700);
+  color: var(--green-700);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
@@ -2532,13 +2532,13 @@ html:has(.cookie) {
   }
   2%,
   18% {
-    background-color: var(--blue-600);
+    background-color: var(--green-600);
     color: var(--white);
   }
 }
 @keyframes flash {
   from {
-    background-color: var(--yellow-400);
+    background-color: var(--coral-400);
     color: var(--ink-900);
   }
 }
