@@ -5,14 +5,16 @@
    Components read only semantic / component tokens, so a block can be
    re-themed by re-pointing the semantic layer (see `.brand`).
 
-   Principles: white page, one action colour (forest green), one attention
-   colour (coral, used sparingly), hairlines instead of shadows,
-   a strict 12-column grid, small consistent radii.
+   Principles: a soft near-white canvas with white surfaces on it, one action
+   colour (forest green), one attention colour (coral, used sparingly), generous
+   radii (cards ≈28px, panels ≈36px, controls are pills), soft shadows instead of
+   hard outlines, a 12-column grid.
    ===================================================================== */
 
 /* ---------- 1. PRIMITIVES ---------- */
 :root {
   --white: #ffffff;
+  --canvas: #f2f4f1;
   --mist-50: #f5f7f4;
   --mist-200: #e1e7e2;
   --mist-500: #7e8c84;
@@ -30,12 +32,15 @@
   --red-700: #c9301a;
   --mint-600: #0b7a4b;
 
-  --r-sm: 0.5rem;
-  --r-md: 0.875rem;
-  --r-lg: 1.25rem;
+  --r-xs: 0.5rem;
+  --r-sm: 0.75rem;
+  --r-md: 1.125rem;
+  --r-lg: 1.75rem;
+  --r-xl: 2.25rem;
+  --r-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgb(17 22 20 / 0.06);
-  --shadow-md: 0 1px 2px rgb(17 22 20 / 0.05), 0 12px 32px -8px rgb(17 22 20 / 0.14);
+  --shadow-sm: 0 1px 2px rgb(17 22 20 / 0.04), 0 6px 18px -8px rgb(17 22 20 / 0.1);
+  --shadow-md: 0 2px 6px rgb(17 22 20 / 0.04), 0 22px 48px -20px rgb(17 22 20 / 0.22);
 
   --fs-hero: clamp(1.9rem, min(9vw, 13vh), 6.75rem);
   --fs-h2: clamp(1.5rem, 1.05rem + 2.1vw, 2.75rem);
@@ -51,7 +56,7 @@
 
 /* ---------- 2. SEMANTIC ---------- */
 :root {
-  --color-bg: var(--white);
+  --color-bg: var(--canvas);
   --color-surface: var(--white);
   --color-subtle: var(--mist-50);
   --color-text: var(--ink-900);
@@ -71,7 +76,9 @@
   --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
   --section-pad: clamp(4.5rem, 3rem + 6vw, 9rem);
   --container: 77rem;
-  --header-h: 4.25rem;
+  --header-h: 3.75rem;
+  /* Inset of the rounded colour panels from the screen edge. */
+  --edge: clamp(0.5rem, 0.2rem + 1.3vw, 1.25rem);
 }
 
 /* Brand block: same components on a forest-green field. */
@@ -94,7 +101,7 @@
   --button-bg: var(--color-primary);
   --button-fg: var(--color-on-primary);
   --button-bg-hover: var(--color-primary-hover);
-  --button-radius: var(--r-md);
+  --button-radius: var(--r-pill);
 
   --card-radius: var(--r-lg);
   --card-pad: clamp(1.25rem, 1rem + 1.4vw, 2.25rem);
@@ -102,7 +109,7 @@
   --field-h: 3.25rem;
   --field-bg: var(--white);
   --field-border: var(--mist-500);
-  --field-radius: var(--r-sm);
+  --field-radius: 0.875rem;
 }
 
 @theme inline {
@@ -114,7 +121,7 @@
    ===================================================================== */
 html {
   overflow-x: clip;
-  scroll-padding-top: calc(var(--header-h) + 1.5rem);
+  scroll-padding-top: calc(var(--header-h) + 2rem);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -151,8 +158,8 @@ a {
   z-index: 100;
   background: var(--ink-900);
   color: var(--white);
-  padding: 0.75rem 1rem;
-  border-radius: var(--r-sm);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--r-pill);
 }
 .skip:focus {
   top: 0.5rem;
@@ -247,22 +254,16 @@ a {
   --button-fg: var(--ink-900);
   --button-bg-hover: var(--coral-500);
 }
+/* Ghost: a quiet tinted pill that works on white cards and on the canvas alike. */
 .btn--ghost {
-  --button-bg: transparent;
+  --button-bg: rgb(17 22 20 / 0.06);
   --button-fg: var(--color-text);
-  --button-bg-hover: var(--color-subtle);
-  border-color: var(--mist-500);
-}
-@media (hover: hover) {
-  .btn--ghost:hover {
-    border-color: var(--color-text);
-  }
+  --button-bg-hover: rgb(17 22 20 / 0.11);
 }
 .btn--sm {
   min-height: 2.75rem;
-  padding: 0.25rem 1.125rem;
+  padding: 0.25rem 1.25rem;
   font-size: 0.9375rem;
-  border-radius: var(--r-sm);
 }
 .btn--block {
   width: 100%;
@@ -271,32 +272,39 @@ a {
 /* =====================================================================
    HEADER
    ===================================================================== */
+/* A floating white pill on the canvas. */
 .hdr {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--white);
-  border-bottom: 1px solid var(--color-border);
+  padding: 0.625rem var(--edge) 0;
 }
-.hdr::after {
+.hdr__in {
+  position: relative;
+  max-width: calc(var(--container) - var(--gutter) * 2 + 2.5rem);
+  height: var(--header-h);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 0.6rem + 1vw, 1.25rem) 0.4375rem;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.375rem, 1.2vw, 1.25rem);
+  background: var(--white);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-sm);
+}
+/* Reading progress, tucked inside the pill. */
+.hdr__in::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
+  /* starts after the pill's rounded ends, on the straight part of its bottom edge */
+  left: calc(var(--header-h) / 2 + 0.5rem);
+  right: calc(var(--header-h) / 2 + 0.5rem);
+  bottom: 0;
   height: 2px;
+  border-radius: var(--r-pill);
   background: var(--color-primary);
   transform: scaleX(0);
   transform-origin: left;
-}
-.hdr__in {
-  max-width: var(--container);
-  height: var(--header-h);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-  display: flex;
-  align-items: center;
-  gap: clamp(0.5rem, 1.5vw, 1.5rem);
 }
 .logo {
   display: inline-flex;
@@ -316,59 +324,79 @@ a {
   width: 0.36em;
   height: 0.36em;
   margin-left: 0.1em;
-  background: var(--color-primary);
+  border-radius: 50%;
+  background: var(--color-accent);
 }
 .nav {
   display: none;
 }
+/* Segmented pill navigation */
 .nav ol {
   display: flex;
-  gap: clamp(1rem, 2.4vw, 2.25rem);
+  gap: 0.125rem;
+  padding: 0.25rem;
+  border-radius: var(--r-pill);
+  background: var(--mist-50);
 }
 .nav a {
   display: inline-flex;
   align-items: center;
-  min-height: 2.75rem;
+  min-height: 2.5rem;
+  padding-inline: clamp(0.75rem, 1.2vw, 1.125rem);
+  border-radius: var(--r-pill);
   text-decoration: none;
   font-size: 0.9375rem;
   font-weight: 500;
   color: var(--ink-700);
-  transition: color var(--dur-fast) linear;
+  transition:
+    color var(--dur-fast) linear,
+    background-color var(--dur-fast) linear,
+    box-shadow var(--dur-fast) linear;
 }
 .nav a::first-letter {
   text-transform: uppercase;
 }
 @media (hover: hover) {
   .nav a:hover {
-    color: var(--color-primary);
+    color: var(--ink-900);
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
   }
 }
+/* RU / EN as a two-segment pill: the current language is the dark segment. */
 .lang {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  min-height: 2.75rem;
-  padding-inline: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--r-pill);
+  background: var(--mist-50);
   text-decoration: none;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+.lang b,
+.lang span {
+  display: grid;
+  place-items: center;
+  min-width: 2.5rem;
+  height: 2.25rem;
+  padding-inline: 0.5rem;
+  border-radius: var(--r-pill);
+}
 .lang b {
   font-weight: 600;
+  background: var(--ink-900);
+  color: var(--white);
 }
 .lang span {
   color: var(--color-text-muted);
-}
-.lang span::before {
-  content: "/";
-  margin-right: 0.35rem;
-  color: var(--mist-500);
+  transition: color var(--dur-fast) linear;
 }
 @media (hover: hover) {
   .lang:hover span {
-    color: var(--color-primary);
+    color: var(--ink-900);
   }
 }
 .hdr__in > .lang {
@@ -379,8 +407,8 @@ a {
   place-items: center;
   width: 2.75rem;
   height: 2.75rem;
-  border: 1px solid var(--mist-500);
-  border-radius: var(--r-sm);
+  border-radius: 50%;
+  background: var(--mist-50);
   color: var(--ink-900);
   cursor: pointer;
   flex: none;
@@ -412,7 +440,8 @@ a {
   height: 100dvh;
   max-height: none;
   margin: 0;
-  padding: 0 var(--gutter) var(--gutter);
+  /* top bar sits exactly where the header pill is, so nothing jumps when the menu opens */
+  padding: 0.625rem var(--edge) var(--gutter);
   border: 0;
   background: var(--white);
   color: var(--ink-900);
@@ -430,18 +459,25 @@ a {
   align-items: center;
   justify-content: space-between;
   flex: none;
+  padding-inline: clamp(1rem, 0.6rem + 1vw, 1.25rem) 0.4375rem;
 }
 .sheet ol {
+  display: grid;
+  gap: 0.5rem;
   margin-block: auto;
   padding-block: 2rem;
-  border-top: 1px solid var(--color-border);
+}
+.sheet > .btn {
+  margin-inline: calc(var(--gutter) - var(--edge));
+  width: auto;
 }
 .sheet li a {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding-block: 1rem;
-  border-bottom: 1px solid var(--color-border);
+  padding: 1.125rem 1.25rem;
+  border-radius: var(--r-md);
+  background: var(--canvas);
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(1.5rem, 8vw, 2.5rem);
@@ -469,29 +505,8 @@ a {
   padding-block: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(3rem, 2rem + 5vw, 6rem);
   overflow-x: clip;
 }
-/* The designer's grid, left visible: twelve hairline columns fading out towards the bottom. */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0 var(--gutter);
-  z-index: -1;
-  max-width: calc(var(--container) - var(--gutter) * 2);
-  margin-inline: auto;
-  background: repeating-linear-gradient(90deg, var(--mist-200) 0 1px, transparent 1px calc(100% / 12));
-  border-right: 1px solid var(--mist-200);
-  -webkit-mask-image: linear-gradient(#000, transparent 85%);
-  mask-image: linear-gradient(#000, transparent 85%);
-  opacity: 0.7;
-  pointer-events: none;
-}
-@media (max-width: 47.999rem) {
-  .hero::before {
-    background: repeating-linear-gradient(90deg, var(--mist-200) 0 1px, transparent 1px calc(100% / 4));
-    opacity: 0.45;
-  }
-}
 /* The headline is the image: it spans the full grid, and its last line sits on a
-   coral slab that runs off the right edge of the screen. */
+   rounded coral highlight. */
 .hero__h1 {
   margin-top: clamp(1rem, 2vw, 1.75rem);
   font-family: var(--font-display);
@@ -517,8 +532,9 @@ a {
 .rot::before {
   content: "";
   position: absolute;
-  inset: 0 -100vmax 0 0;
+  inset: 0;
   z-index: -1;
+  border-radius: 0.24em;
   background: var(--color-accent);
   transform-origin: left;
 }
@@ -577,14 +593,14 @@ a {
   width: 100%;
   max-width: 28rem;
   background: var(--white);
-  border: 1.5px solid var(--ink-900);
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
 }
 .lesson__top {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.9rem 1.25rem;
+  padding: 1rem 1.25rem;
   border-bottom: 1px solid var(--color-border);
 }
 .avatar {
@@ -626,6 +642,7 @@ a {
 .wave i {
   width: 3px;
   height: 100%;
+  border-radius: var(--r-pill);
   background: currentColor;
   transform: scaleY(0.35);
 }
@@ -646,13 +663,16 @@ a {
   width: 2.75rem;
   height: 2.75rem;
   margin-right: -0.5rem;
+  border-radius: 50%;
   color: var(--color-text-muted);
   cursor: pointer;
   flex: none;
+  transition: background-color var(--dur-fast) linear;
 }
 @media (hover: hover) {
   .pause:hover {
     color: var(--ink-900);
+    background: var(--mist-50);
   }
 }
 .lesson__body {
@@ -660,8 +680,8 @@ a {
 }
 .bubble {
   max-width: 86%;
-  padding: 0.7rem 0.95rem;
-  border-radius: 1rem 1rem 1rem 0.25rem;
+  padding: 0.8rem 1.05rem;
+  border-radius: 1.25rem 1.25rem 1.25rem 0.375rem;
   background: var(--mist-50);
   line-height: 1.35;
 }
@@ -678,7 +698,7 @@ a {
 }
 .bubble--me {
   margin: 0.75rem 0 0 auto;
-  border-radius: 1rem 1rem 0.25rem 1rem;
+  border-radius: 1.25rem 1.25rem 0.375rem 1.25rem;
   background: var(--color-primary);
   color: var(--white);
 }
@@ -716,36 +736,35 @@ a {
   padding: 1rem 1.25rem 1.25rem;
   border-top: 1px solid var(--color-border);
   background: var(--mist-50);
-  border-radius: 0 0 var(--r-md) var(--r-md);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
 }
 .rail__legend {
   font-size: 0.8125rem;
   font-weight: 600;
 }
-/* Segmented control */
+/* Segmented pill control */
 .rail__opts {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  gap: 0.125rem;
   margin-top: 0.6rem;
+  padding: 0.25rem;
   background: var(--white);
-  border: 1px solid var(--mist-500);
-  border-radius: var(--r-sm);
-  overflow: hidden;
+  border-radius: var(--r-pill);
+  box-shadow: inset 0 0 0 1px var(--mist-200);
 }
 .rail__opt {
   position: relative;
   display: grid;
   place-items: center;
-  min-height: 2.75rem;
+  min-height: 2.5rem;
+  border-radius: var(--r-pill);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition:
     background-color var(--dur-fast) linear,
     color var(--dur-fast) linear;
-}
-.rail__opt + .rail__opt {
-  border-left: 1px solid var(--mist-200);
 }
 .rail__opt input {
   position: absolute;
@@ -759,7 +778,7 @@ a {
 }
 .rail__opt:has(input:focus-visible) {
   outline: 3px solid var(--color-focus);
-  outline-offset: -3px;
+  outline-offset: 1px;
 }
 @media (hover: hover) {
   .rail__opt:not(:has(input:checked)):hover {
@@ -795,14 +814,15 @@ a {
   .lesson {
     grid-column: 8 / span 5;
     justify-self: end;
-    /* overlaps only the bottom edge of the slab, so it never covers the rotating phrase */
-    margin-top: calc(clamp(1.75rem, 3.5vw, 3.5rem) * -1 - 1rem);
+    margin-top: 0;
   }
 }
 
-/* Clocks — a full-bleed green band with the live time in every Russian time zone. */
+/* Clocks — a rounded green panel of live time tiles, one per Russian time zone. */
 .clocks {
-  padding-block: clamp(2.25rem, 4vw, 3.5rem);
+  margin-inline: var(--edge);
+  padding-block: clamp(2rem, 4vw, 3.5rem);
+  border-radius: var(--r-xl);
 }
 .clocks__head {
   display: grid;
@@ -824,28 +844,31 @@ a {
 .zones__list {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 7.75rem;
+  grid-auto-columns: 8.25rem;
+  gap: 0.5rem;
   overflow-x: auto;
   scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gutter);
   scrollbar-width: none;
   margin-inline: calc(var(--gutter) * -1);
   padding-inline: var(--gutter);
-  border-block: 1px solid var(--color-border);
 }
 .zones__list::-webkit-scrollbar {
   display: none;
+}
+.zones__list:focus-visible {
+  outline-offset: -3px;
+  border-radius: var(--r-lg);
 }
 .zone {
   scroll-snap-align: start;
   display: grid;
   align-content: start;
-  gap: 0.15rem;
-  padding: 0.9rem 0.75rem 1rem 0;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem 1rem;
+  border-radius: var(--r-md);
+  background: rgb(255 255 255 / 0.08);
   line-height: 1.25;
-}
-.zone + .zone {
-  padding-left: 0.75rem;
-  border-left: 1px solid var(--color-border);
 }
 .zone__city {
   font-size: 0.625rem;
@@ -879,6 +902,7 @@ a {
   width: 0.4rem;
   height: 0.4rem;
   margin-right: 0.35rem;
+  border-radius: 50%;
   background: var(--coral-400);
   vertical-align: 0.05em;
 }
@@ -895,7 +919,28 @@ a {
 .zone[data-you="true"] {
   background: var(--coral-400);
   color: var(--ink-900);
-  padding-left: 0.75rem;
+}
+/* Last tile: what the two markers mean. */
+.zone--legend {
+  align-content: center;
+  gap: 0.4rem;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--color-border);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+.zone--legend span::before {
+  content: "";
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.45rem;
+  border-radius: 50%;
+  background: var(--coral-400);
+}
+.zone--legend span:last-child::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px currentColor;
 }
 .zone[data-you="true"] .zone__off {
   display: none;
@@ -916,9 +961,13 @@ a {
     grid-column: 6 / span 7;
   }
 }
-@media (min-width: 75rem) {
+/* Wide screens: two neat rows of six tiles instead of a scroller. */
+@media (min-width: 64rem) {
   .zones__list {
-    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: row;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-columns: auto;
+    gap: 0.625rem;
     overflow: visible;
     margin-inline: 0;
     padding-inline: 0;
@@ -935,19 +984,21 @@ a {
   z-index: 1;
   left: 100%;
   top: -0.4rem;
-  width: 3px;
+  width: 6px;
   height: calc(clamp(0.75rem, 1.6vw, 1.25rem) + 0.8rem);
   margin-left: -3px;
+  border-radius: var(--r-pill);
   background: var(--coral-400);
-  box-shadow: 0 0 0 1px var(--ink-900);
+  box-shadow: 0 0 0 2px var(--canvas);
 }
 .ruler__bar {
   display: flex;
-  gap: 2px;
+  gap: 4px;
   height: clamp(0.75rem, 1.6vw, 1.25rem);
 }
 .ruler__bar span {
   flex-basis: 0;
+  border-radius: var(--r-pill);
   background: var(--mist-200);
 }
 .ruler__bar span {
@@ -974,7 +1025,7 @@ a {
 .ruler__marks {
   position: relative;
   height: 1.75rem;
-  border-top: 1px solid var(--ink-900);
+  border-top: 1px solid var(--mist-500);
   margin-top: 0.5rem;
   font-size: 0.75rem;
   font-weight: 600;
@@ -994,7 +1045,7 @@ a {
   top: 0;
   width: 1px;
   height: 0.35rem;
-  background: var(--ink-900);
+  background: var(--mist-500);
 }
 .ruler__marks span:first-child {
   transform: none;
@@ -1010,14 +1061,16 @@ a {
 }
 .trial {
   display: grid;
-  gap: 0;
-  border-top: 1px solid var(--color-border);
+  gap: 0.75rem;
 }
 .trial li {
   display: grid;
+  align-content: start;
   gap: 0.35rem;
-  padding-block: 1.25rem;
-  border-bottom: 1px solid var(--color-border);
+  padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  border-radius: var(--r-lg);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
   color: var(--ink-700);
   line-height: 1.5;
 }
@@ -1052,16 +1105,6 @@ a {
 @media (min-width: 48rem) {
   .trial {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    border-top: 0;
-  }
-  .trial li {
-    align-content: start;
-    padding: 0 1.5rem 0 0;
-    border-bottom: 0;
-  }
-  .trial li + li {
-    padding-left: 1.5rem;
-    border-left: 1px solid var(--color-border);
   }
 }
 
@@ -1107,14 +1150,14 @@ a {
 }
 .card {
   position: sticky;
-  top: calc(var(--header-h) + 1rem + var(--i, 0) * 0.85rem);
+  top: calc(var(--header-h) + 1.5rem + var(--i, 0) * 0.85rem);
   display: grid;
   gap: 1.5rem;
   min-height: clamp(17rem, 46vh, 25rem);
   padding: clamp(1.5rem, 1rem + 2.5vw, 3rem);
-  border: 1.5px solid var(--ink-900);
-  border-radius: var(--r-lg);
+  border-radius: var(--r-xl);
   background: var(--card-bg, var(--white));
+  box-shadow: var(--shadow-md);
   color: var(--card-fg, var(--ink-900));
   /* clip, not hidden: `hidden` would make the card a scroll container and freeze view() timelines inside it */
   overflow: clip;
@@ -1129,12 +1172,13 @@ a {
 }
 .card--accent {
   --card-bg: var(--coral-400);
+  --card-soft: var(--ink-700);
   --card-glyph: var(--ink-900);
   --card-mark: var(--ink-900);
   --card-track: rgb(17 22 20 / 0.16);
 }
 .card--mist {
-  --card-bg: var(--mist-50);
+  --card-bg: var(--green-50);
 }
 .card__main {
   display: flex;
@@ -1194,11 +1238,14 @@ a {
 }
 .split {
   display: flex;
+  overflow: hidden;
+  border-radius: var(--r-pill);
   height: 0.625rem;
   background: var(--card-track, var(--mist-200));
 }
 .split__you {
   flex: 0 0 70%;
+  border-radius: var(--r-pill);
   background: var(--card-mark, var(--color-primary));
 }
 .split__t {
@@ -1213,7 +1260,7 @@ a {
   font-weight: 600;
 }
 .split__legend span:last-child {
-  opacity: 0.7;
+  color: var(--card-soft, var(--ink-700));
 }
 /* 7–23: sixteen hour ticks */
 .hours {
@@ -1289,9 +1336,10 @@ a {
 .kinetic b::after {
   content: "";
   flex: none;
-  width: 0.32em;
-  height: 0.32em;
+  width: 0.3em;
+  height: 0.3em;
   margin-inline: 0.45em;
+  border-radius: 50%;
   background: var(--color-primary);
 }
 .kinetic p:nth-child(2) {
@@ -1306,8 +1354,7 @@ a {
    PRICING
    ===================================================================== */
 .pricing {
-  background: var(--mist-50);
-  border-block: 1px solid var(--color-border);
+  background: transparent;
 }
 .tickets {
   display: grid;
@@ -1321,8 +1368,9 @@ a {
   padding: var(--card-pad);
   background: var(--color-surface);
   color: var(--color-text);
-  border: 1px solid var(--color-border);
+  border: 0;
   border-radius: var(--card-radius);
+  box-shadow: var(--shadow-sm);
   transition:
     border-color var(--dur-fast) linear,
     box-shadow var(--dur-base) var(--ease-out);
@@ -1364,12 +1412,15 @@ a {
   }
 }
 .ticket[data-selected="true"] {
-  border-color: var(--ink-900);
-  box-shadow: 0 0 0 1px var(--ink-900);
+  box-shadow:
+    0 0 0 2px var(--green-600),
+    var(--shadow-md);
 }
 .ticket--feat[data-selected="true"] {
   border-color: var(--coral-400);
-  box-shadow: 0 0 0 2px var(--coral-400);
+  box-shadow:
+    0 0 0 3px var(--coral-400),
+    var(--shadow-md);
 }
 .ticket__top {
   display: flex;
@@ -1383,8 +1434,8 @@ a {
   letter-spacing: 0.02em;
 }
 .ticket__tag {
-  padding: 0.25rem 0.6rem;
-  border-radius: var(--r-sm);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--r-pill);
   background: var(--coral-400);
   color: var(--ink-900);
   font-size: 0.75rem;
@@ -1456,8 +1507,8 @@ a {
   position: absolute;
   top: -0.7rem;
   right: 1.25rem;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--r-sm);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--r-pill);
   background: var(--ink-900);
   color: var(--white);
   font-size: 0.75rem;
@@ -1483,6 +1534,11 @@ a {
 /* =====================================================================
    SIGN-UP
    ===================================================================== */
+/* The sign-up section is a rounded green panel inset from the screen edge. */
+.signup {
+  margin-inline: var(--edge);
+  border-radius: var(--r-xl);
+}
 .signup__zero {
   margin-top: 0.5rem;
   font-family: var(--font-display);
@@ -1503,12 +1559,14 @@ a {
 .slip__new {
   margin-inline: -0.5rem;
   padding-inline: 0.5rem;
+  border-radius: var(--r-sm);
 }
 .signup__form {
   padding: clamp(1.25rem, 1rem + 1.6vw, 2.25rem);
   background: var(--white);
   color: var(--ink-900);
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
   /* The form is a light island inside the brand panel. */
   --color-text: var(--ink-900);
   --color-text-muted: var(--ink-500);
@@ -1603,7 +1661,7 @@ select.field {
   height: 1.5rem;
   margin: 0;
   border: 1px solid var(--mist-500);
-  border-radius: 0.3rem;
+  border-radius: 0.45rem;
   background: var(--white);
   cursor: pointer;
   display: grid;
@@ -1657,8 +1715,10 @@ select.field {
   overflow: hidden;
 }
 .slip {
-  margin-top: 0.5rem;
-  border-top: 1px solid var(--color-border);
+  margin-top: 0.75rem;
+  padding: 0.375rem 1.25rem;
+  border-radius: var(--r-md);
+  background: rgb(255 255 255 / 0.08);
   font-size: 0.9375rem;
 }
 .slip div {
@@ -1666,8 +1726,10 @@ select.field {
   justify-content: space-between;
   align-items: baseline;
   gap: 1rem;
-  padding-block: 0.7rem;
-  border-bottom: 1px solid var(--color-border);
+  padding-block: 0.75rem;
+}
+.slip div + div {
+  border-top: 1px solid var(--color-border);
 }
 .slip dt {
   color: var(--color-text-muted);
@@ -1682,17 +1744,15 @@ select.field {
   margin-top: 2.25rem;
 }
 .steps ol {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   counter-reset: s;
-  border-top: 1px solid var(--color-border);
 }
 .steps li {
   counter-increment: s;
   display: grid;
-  grid-template-columns: 2.25rem 1fr;
+  grid-template-columns: 2.75rem 1fr;
   align-items: baseline;
-  padding-block: 0.8rem;
-  border-bottom: 1px solid var(--color-border);
+  padding-block: 0.6rem;
   font-size: var(--fs-small);
   line-height: 1.45;
 }
@@ -1723,7 +1783,7 @@ select.field {
   background: var(--white);
   color: var(--ink-900);
   border: 0;
-  border-radius: var(--r-lg);
+  border-radius: var(--r-xl);
   box-shadow: var(--shadow-md);
 }
 .thanks::backdrop {
@@ -1773,17 +1833,21 @@ select.field {
   align-content: start;
 }
 .faq__list {
-  border-top: 1px solid var(--ink-900);
+  display: grid;
+  gap: 0.625rem;
 }
 .qa {
-  border-bottom: 1px solid var(--color-border);
+  padding-inline: clamp(1.125rem, 0.8rem + 1vw, 1.75rem) clamp(0.75rem, 0.5rem + 0.8vw, 1.25rem);
+  border-radius: var(--r-lg);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
 }
 .qa summary {
   display: grid;
-  grid-template-columns: 1fr 1.5rem;
-  gap: 1.5rem;
+  grid-template-columns: 1fr 2.5rem;
+  gap: 1rem;
   align-items: center;
-  padding-block: 1.35rem;
+  padding-block: 1.1rem;
   cursor: pointer;
   list-style: none;
   font-weight: 600;
@@ -1801,9 +1865,14 @@ select.field {
 }
 .qa__plus {
   position: relative;
-  width: 1.5rem;
-  height: 1.5rem;
-  transition: transform var(--dur-base) var(--ease-out);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--mist-50);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    background-color var(--dur-fast) linear,
+    color var(--dur-fast) linear;
 }
 .qa__plus::before,
 .qa__plus::after {
@@ -1821,12 +1890,18 @@ select.field {
 }
 .qa[open] .qa__plus {
   transform: rotate(45deg);
-  color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--white);
 }
 .qa__a {
-  padding: 0 3rem 1.6rem 0;
+  padding: 0 0.25rem 1.5rem 0;
   max-width: 44rem;
   color: var(--ink-700);
+}
+@media (min-width: 40rem) {
+  .qa__a {
+    padding-right: 3.5rem;
+  }
 }
 @media (min-width: 64rem) {
   .faq__grid {
@@ -1850,8 +1925,10 @@ select.field {
    FOOTER
    ===================================================================== */
 .ftr {
-  padding-top: clamp(3.5rem, 6vw, 6rem);
-  border-top: 1px solid var(--color-border);
+  margin-inline: var(--edge);
+  padding-top: clamp(3rem, 6vw, 5.5rem);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  background: var(--white);
   overflow: clip;
 }
 /* Sign-off: the wordmark at full width, cut by the bottom of the page. */
@@ -1881,7 +1958,7 @@ select.field {
 }
 .ftr__col h3 {
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--ink-900);
+  border-bottom: 1px solid var(--mist-200);
   color: var(--color-text-muted);
 }
 .ftr__col a,
@@ -1933,6 +2010,8 @@ select.field {
    LEVEL TEST — the one full-bleed coral moment
    ===================================================================== */
 .quizsec {
+  margin-inline: var(--edge);
+  border-radius: var(--r-xl);
   background: var(--coral-400);
   color: var(--ink-900);
   padding-block: var(--section-pad);
@@ -1960,8 +2039,8 @@ select.field {
   min-height: 21rem;
   padding: clamp(1.25rem, 1rem + 1.6vw, 2.25rem);
   background: var(--white);
-  border: 1.5px solid var(--ink-900);
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
   --color-focus: var(--green-600);
 }
 .quiz__top {
@@ -1982,7 +2061,8 @@ select.field {
 }
 .quiz__bar li {
   width: 1.5rem;
-  height: 0.25rem;
+  height: 0.3rem;
+  border-radius: var(--r-pill);
   background: var(--mist-200);
   transition: background-color var(--dur-base) linear;
 }
@@ -2007,7 +2087,8 @@ select.field {
   height: 0.9em;
   margin-inline: 0.15em;
   vertical-align: -0.1em;
-  border-bottom: 3px solid var(--color-primary);
+  border: 2px dashed var(--color-primary);
+  border-radius: 0.3em;
   background: var(--green-50);
 }
 .quiz__sentence:focus,
@@ -2021,9 +2102,9 @@ select.field {
 }
 .quiz__opt {
   min-height: 3.25rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.25rem;
   border: 1px solid var(--mist-500);
-  border-radius: var(--r-sm);
+  border-radius: var(--r-pill);
   background: var(--white);
   font-weight: 600;
   font-size: 1.0625rem;
@@ -2058,7 +2139,8 @@ select.field {
   opacity: 0.45;
 }
 .quiz__fill {
-  padding: 0 0.2em;
+  padding: 0 0.25em;
+  border-radius: 0.3em;
   background: var(--coral-400);
   color: var(--ink-900);
 }
@@ -2099,6 +2181,7 @@ select.field {
 .quiz__dots li {
   width: 1.5rem;
   height: 0.375rem;
+  border-radius: var(--r-pill);
   background: var(--mist-200);
 }
 .quiz__dots li[data-ok="true"] {
@@ -2151,10 +2234,10 @@ select.field {
 /* Pricing guarantee line */
 .guarantee {
   margin-top: 1rem;
-  padding: 1rem var(--card-pad);
-  border: 1px solid var(--ink-900);
-  border-radius: var(--r-md);
-  background: var(--white);
+  padding: 1.125rem var(--card-pad);
+  border-radius: var(--r-pill);
+  background: var(--green-50);
+  color: var(--green-700);
   font-weight: 600;
   text-align: center;
 }
@@ -2172,8 +2255,7 @@ html:has(.cookie) {
   max-width: 44rem;
   margin-inline: auto;
   background: var(--white);
-  border: 1px solid var(--ink-900);
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
   box-shadow: var(--shadow-md);
 }
 .cookie__in {
@@ -2225,13 +2307,14 @@ html:has(.cookie) {
 .legal mark {
   background: #ffe4da;
   color: inherit;
-  padding: 0 0.2em;
+  padding: 0 0.25em;
+  border-radius: 0.3em;
 }
 .legal__note {
   padding: 1rem 1.25rem;
-  border: 1px solid var(--color-border);
   border-radius: var(--r-md);
-  background: var(--mist-50);
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
   font-size: var(--fs-small);
 }
 .legal a {
@@ -2362,7 +2445,7 @@ html:has(.cookie) {
 
   /* Header: reading progress */
   @supports (animation-timeline: scroll()) {
-    .hdr::after {
+    .hdr__in::after {
       animation: progress linear both;
       animation-timeline: scroll(root);
     }
@@ -2503,20 +2586,20 @@ html:has(.cookie) {
     transform: scaleX(1);
   }
 }
-/* Each of the five answers owns one fifth of the loop. */
+/* Each answer owns one fifth of the loop and cross-fades into the next — no empty gap. */
 @keyframes demo {
   0% {
     visibility: hidden;
     opacity: 0;
     translate: 0 6px;
   }
-  2%,
-  18% {
+  1.5%,
+  19.5% {
     visibility: visible;
     opacity: 1;
     translate: 0 0;
   }
-  20%,
+  21%,
   100% {
     visibility: hidden;
     opacity: 0;
@@ -2525,13 +2608,13 @@ html:has(.cookie) {
 }
 @keyframes demo-opt {
   0%,
-  20%,
+  21%,
   100% {
     background-color: transparent;
     color: inherit;
   }
-  2%,
-  18% {
+  1.5%,
+  19.5% {
     background-color: var(--green-600);
     color: var(--white);
   }

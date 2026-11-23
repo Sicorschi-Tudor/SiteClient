@@ -81,6 +81,11 @@ export function TimeZones({ zones }: { zones: Dict["zones"] }) {
           </li>
         );
       })}
+      {/* Fills the twelfth slot of the 6×2 grid with the key to the markers. */}
+      <li className="zone zone--legend" aria-hidden="true">
+        <span>{zones.open}</span>
+        <span>{zones.night}</span>
+      </li>
     </ol>
   );
 }
