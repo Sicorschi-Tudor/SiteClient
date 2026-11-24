@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { journalEntry, writeToJournal } from "@/lib/journal";
 import { validateLead, type LeadInput } from "@/lib/lead";
 import {
   formatLead,
@@ -19,6 +20,16 @@ const MAX_TOTAL = 120;
 const MAX_KEYS = 5000;
 const hits = new Map<string, number[]>();
 let total: number[] = [];
+let lastSweep = 0;
+
+/** Forget IP addresses once their 10-minute window is over (the Policy promises no longer). */
+function sweep(now: number) {
+  if (now - lastSweep < 60_000) return;
+  lastSweep = now;
+  for (const [ip, times] of hits) {
+    if (times.every((t) => now - t >= WINDOW_MS)) hits.delete(ip);
+  }
+}
 
 /**
  * The client IP as reported by the reverse proxy. `x-real-ip` (nginx, Vercel) is set by
@@ -35,6 +46,7 @@ function clientIp(req: Request) {
 }
 
 function isLimited(ip: string, now: number) {
+  sweep(now);
   total = total.filter((t) => now - t < WINDOW_MS);
   if (total.length >= MAX_TOTAL) return true;
   if (!ip) return false;
@@ -106,9 +118,18 @@ export async function POST(req: Request) {
     timeStyle: "short",
     timeZone: "Europe/Moscow",
   }).format(now);
+  const page = req.headers.get("referer") ?? undefined;
   const text =
     (suspicious ? "⚠️ <i>Возможно, спам: форма отправлена быстрее 1,5 с</i>\n\n" : "") +
-    formatLead(lead, { when, referer: req.headers.get("referer") ?? undefined });
+    formatLead(lead, { when, referer: page });
+
+  // 1) Primary copy on our own server (in Russia) — only then is the lead forwarded anywhere.
+  try {
+    await writeToJournal(journalEntry(lead, { now, page, suspicious }), now);
+  } catch (err) {
+    console.error("[lead] could not write the lead journal — lead NOT forwarded:", err);
+    return NextResponse.json({ ok: false, error: "storage" }, { status: 503 });
+  }
 
   const channels: Promise<void>[] = [];
   if (isTelegramConfigured()) channels.push(sendToTelegram(text));

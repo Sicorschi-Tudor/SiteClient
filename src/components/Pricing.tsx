@@ -37,7 +37,6 @@ export function Pricing({ dict, otherLang }: { dict: Dict; otherLang: string }) 
             </PlanTicket>
           ))}
         </div>
-        <p className="guarantee rv">{p.guarantee}</p>
       </div>
     </section>
   );

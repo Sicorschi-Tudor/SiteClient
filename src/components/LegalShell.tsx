@@ -1,19 +1,9 @@
 import type { ReactNode } from "react";
 import type { Dict } from "@/dictionaries";
 import { localePath } from "@/dictionaries";
-import type { Locale } from "@/lib/site";
+import { metrikaId, type Locale } from "@/lib/site";
+import { CookieSettings } from "./Analytics";
 import { LangSwitch, Logo } from "./Header";
-
-/** Operator details used in both legal documents — replace the placeholders once. */
-export const operator = {
-  name: "ИП Фамилия Имя Отчество",
-  inn: "000000000000",
-  ogrnip: "000000000000000",
-  address: "000000, г. Город, ул. Улица, д. 0",
-  email: "privacy@example.ru",
-  site: "example.ru",
-  updated: "20 ноября 2026 г.",
-};
 
 export function LegalShell({
   locale,
@@ -48,6 +38,11 @@ export function LegalShell({
             )}
             {children}
           </article>
+          {metrikaId && (
+            <p className="legal__cookies">
+              <CookieSettings label={dict.footer.cookies} />
+            </p>
+          )}
         </div>
       </main>
     </>

@@ -383,10 +383,6 @@ export function LeadForm({ locale, t, plans, links }: Props) {
             <a href={links.consent} target="_blank" rel="noopener">
               {t.consent.consentLink}
             </a>
-            {t.consent.middle}
-            <a href={links.privacy} target="_blank" rel="noopener">
-              {t.consent.policyLink}
-            </a>
             {t.consent.after}
             {errors.consent && (
               <span className="gap__err" id="f-consent-err">
@@ -395,6 +391,13 @@ export function LeadForm({ locale, t, plans, links }: Props) {
             )}
           </span>
         </label>
+        <p className="consent__note">
+          {t.consent.policyBefore}
+          <a href={links.privacy} target="_blank" rel="noopener">
+            {t.consent.policyLink}
+          </a>
+          {t.consent.policyAfter}
+        </p>
 
         <div className="signup__submit">
           <button className="btn btn--block" type="submit" aria-disabled={status === "sending"}>

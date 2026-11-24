@@ -1,4 +1,5 @@
 import "server-only";
+import { legalMeta } from "@/legal/documents";
 import type { LeadInput } from "./lead";
 
 const PLAN_LABEL: Record<string, string> = {
@@ -34,6 +35,7 @@ export function formatLead(lead: LeadInput, meta: { when: string; referer?: stri
     `<b>Тариф:</b> ${esc(lead.plan ? (PLAN_LABEL[lead.plan] ?? lead.plan) : "не выбран — нужна консультация")}`,
     "",
     `<i>Язык сайта: ${esc(lead.locale)} · ${esc(meta.when)} МСК</i>`,
+    `<i>Согласие на обработку ПДн: дано (редакция от ${esc(legalMeta.updated)})</i>`,
     meta.referer ? `<i>Страница: ${esc(meta.referer.slice(0, 200))}</i>` : null,
   ];
   return rows.filter((r) => r !== null).join("\n");

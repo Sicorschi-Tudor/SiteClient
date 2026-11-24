@@ -65,11 +65,35 @@ export function Analytics({ id, t, privacyHref }: Props) {
           <button type="button" className="btn btn--sm btn--ghost" onClick={() => write("no")}>
             {t.decline}
           </button>
-          <button type="button" className="btn btn--sm" onClick={() => write("yes")}>
+          <button type="button" className="btn btn--sm btn--ghost" onClick={() => write("yes")}>
             {t.accept}
           </button>
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * "Cookie settings": forgets the visitor's choice and reloads the page, so the banner
+ * appears again and an already loaded Metrica counter is unloaded.
+ */
+export function CookieSettings({ label }: { label: string }) {
+  return (
+    <button
+      type="button"
+      className="cookie-settings"
+      onClick={() => {
+        memory = null;
+        try {
+          localStorage.removeItem(KEY);
+        } catch {
+          /* storage blocked: nothing was saved */
+        }
+        window.location.reload();
+      }}
+    >
+      {label}
+    </button>
   );
 }

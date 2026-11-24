@@ -1,14 +1,17 @@
 import type { Dict } from "@/dictionaries";
 import { contacts, localePath } from "@/dictionaries";
-import type { Locale } from "@/lib/site";
+import { metrikaId, type Locale } from "@/lib/site";
+import { CookieSettings } from "./Analytics";
 
 export function Footer({ locale, dict }: { locale: Locale; dict: Dict }) {
   const f = dict.footer;
   const year = new Date().getFullYear();
   return (
-    <footer className="ftr">
+    <footer id="kontakty" className="ftr" aria-labelledby="kontakty-title">
       <div className="wrap">
-        <h2 className="h2">{f.title}</h2>
+        <h2 id="kontakty-title" className="h2">
+          {f.title}
+        </h2>
         <div className="ftr__cols">
           <div className="ftr__col">
             <h3 className="label">{f.contactsTitle}</h3>
@@ -51,11 +54,15 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dict }) {
               <li>
                 <a href={localePath(locale, "/consent")}>{f.consent}</a>
               </li>
+              {metrikaId && (
+                <li>
+                  <CookieSettings label={f.cookies} />
+                </li>
+              )}
             </ul>
           </div>
         </div>
         <p className="ftr__legal">
-          <span>{f.entity}</span>
           <span>
             © {year} {dict.brand.name}. {f.rights}
           </span>
