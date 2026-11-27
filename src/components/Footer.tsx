@@ -7,9 +7,9 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dict }) {
   const f = dict.footer;
   const year = new Date().getFullYear();
   return (
-    <footer id="kontakty" className="ftr" aria-labelledby="kontakty-title">
+    <footer id="kontakty" className="ftr brand" aria-labelledby="kontakty-title">
       <div className="wrap">
-        <h2 id="kontakty-title" className="h2">
+        <h2 id="kontakty-title" className="h2 reveal">
           {f.title}
         </h2>
         <div className="ftr__cols">
@@ -69,7 +69,9 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dict }) {
         </p>
       </div>
       <p className="ftr__mark" aria-hidden="true">
-        <span>glossa</span>
+        <span>
+          glossa<i>.</i>
+        </span>
       </p>
     </footer>
   );

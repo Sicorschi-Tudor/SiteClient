@@ -39,6 +39,7 @@ export function LeadForm({ locale, t, plans, links }: Props) {
   const formRef = useRef<HTMLFormElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const shownAt = useRef(0);
+  const emailBox = useRef<HTMLDetailsElement>(null);
 
   // Restore a draft (it survives the RU ⇄ EN switch, which is a full page load).
   useEffect(() => {
@@ -53,6 +54,8 @@ export function LeadForm({ locale, t, plans, links }: Props) {
         const el = form.elements.namedItem(key);
         if (el instanceof HTMLInputElement && typeof d[key] === "string" && !el.value) el.value = d[key];
       }
+      // a restored e-mail must stay visible, never hidden in the collapsed box
+      if (typeof d.email === "string" && d.email && emailBox.current) emailBox.current.open = true;
       setSelection({
         ...(isPlanId(d.plan) ? { plan: d.plan } : {}),
         ...(isLevelId(d.level) ? { level: d.level } : {}),
@@ -111,6 +114,8 @@ export function LeadForm({ locale, t, plans, links }: Props) {
   const focusFirstInvalid = (errs: LeadErrors) => {
     const first = ORDER.find((f) => errs[f]);
     if (!first) return;
+    // The optional email lives inside a collapsed <details>: open it before focusing.
+    if (errs.email && emailBox.current) emailBox.current.open = true;
     const el = formRef.current?.elements.namedItem(first);
     if (el instanceof HTMLElement) el.focus();
   };
@@ -202,6 +207,16 @@ export function LeadForm({ locale, t, plans, links }: Props) {
         noValidate
         aria-labelledby="zapis-title"
       >
+        {/* What the request will contain — updates live as level / plan are chosen anywhere on the page. */}
+        <ul className="form-chips" aria-label={t.slip.title} aria-live="polite">
+          <li>{t.levels[level]}</li>
+          <li key={plan} className={plan ? "slip__new" : undefined}>
+            {chosenPlan ? chosenPlan.name : t.plan.placeholder}
+          </li>
+          <li className="form-chips__free">
+            {t.slip.trial} · {rub(t.slip.free)}
+          </li>
+        </ul>
         <div className="gap">
           <label className="gap__label" htmlFor="f-name">
             {t.name.label}
@@ -257,34 +272,44 @@ export function LeadForm({ locale, t, plans, links }: Props) {
           </div>
         </div>
 
+        <details
+          className="more-email"
+          ref={emailBox}
+          // once opened it stays open; move focus into the field the visitor asked for
+          onToggle={(e) => {
+            if (e.currentTarget.open) document.getElementById("f-email")?.focus({ preventScroll: true });
+          }}
+        >
+          <summary>{t.addEmail}</summary>
         <div className="gap">
-          <label className="gap__label" htmlFor="f-email">
-            {t.email.label}
-          </label>
-          <div className="gap__field">
-            <input
-              id="f-email"
-              name="email"
-              className="field"
-              type="email"
-              inputMode="email"
-              autoComplete="email"
-              maxLength={120}
-              placeholder={t.email.placeholder}
-              aria-invalid={Boolean(errors.email)}
-              aria-describedby={describe("email", true)}
-              onInput={() => clearError("email")}
-            />
-            {errors.email && (
-              <span className="gap__err" id="f-email-err">
-                {err("email")}
+            <label className="gap__label" htmlFor="f-email">
+              {t.email.label}
+            </label>
+            <div className="gap__field">
+              <input
+                id="f-email"
+                name="email"
+                className="field"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                maxLength={120}
+                placeholder={t.email.placeholder}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={describe("email", true)}
+                onInput={() => clearError("email")}
+              />
+              {errors.email && (
+                <span className="gap__err" id="f-email-err">
+                  {err("email")}
+                </span>
+              )}
+              <span className="gap__hint" id="f-email-hint">
+                {t.email.hint}
               </span>
-            )}
-            <span className="gap__hint" id="f-email-hint">
-              {t.email.hint}
-            </span>
+            </div>
           </div>
-        </div>
+        </details>
 
         <div className="gap">
           <label className="gap__label" htmlFor="f-level">
@@ -407,35 +432,10 @@ export function LeadForm({ locale, t, plans, links }: Props) {
           <p className="form-status" role="alert">
             {failure}
           </p>
+          <p className="signup__after">{t.after}</p>
         </div>
       </form>
 
-      <aside className="aside" aria-label={t.slip.title}>
-        <p className="label">{t.slip.title}</p>
-        <dl className="slip" aria-live="polite">
-          <div>
-            <dt>{t.slip.level}</dt>
-            <dd>{t.levels[level]}</dd>
-          </div>
-          {/* key restarts the highlight when a plan arrives from the pricing cards */}
-          <div key={plan} className={plan ? "slip__new" : undefined}>
-            <dt>{t.slip.plan}</dt>
-            <dd>{chosenPlan ? chosenPlan.name : t.plan.placeholder}</dd>
-          </div>
-          <div>
-            <dt>{t.slip.trial}</dt>
-            <dd>{rub(t.slip.free)}</dd>
-          </div>
-        </dl>
-        <div className="steps">
-          <p className="label">{t.steps.title}</p>
-          <ol>
-            {t.steps.items.map((s) => (
-              <li key={s}>{s}</li>
-            ))}
-          </ol>
-        </div>
-      </aside>
 
       <dialog ref={dialogRef} className="thanks" aria-labelledby="thanks-title">
         <span className="thanks__ok" aria-hidden="true">

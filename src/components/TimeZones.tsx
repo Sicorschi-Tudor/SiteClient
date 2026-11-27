@@ -1,46 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef } from "react";
+import { useNow } from "@/lib/clock";
 import type { Dict } from "@/dictionaries";
 
 /** Kaliningrad is UTC+2 (MSK−1) … Kamchatka is UTC+12 (MSK+9). One city per zone. */
 const FIRST_UTC = 2;
-
-// A minute-resolution clock shared by every subscriber; server snapshot is 0 = "no time yet".
-let now = 0;
-const subs = new Set<() => void>();
-let timer: ReturnType<typeof setInterval> | undefined;
-function subscribe(cb: () => void) {
-  subs.add(cb);
-  if (!timer) {
-    now = Date.now();
-    timer = setInterval(() => {
-      now = Date.now();
-      subs.forEach((s) => s());
-    }, 20_000);
-  }
-  // First paint after hydration: publish the real time.
-  queueMicrotask(cb);
-  return () => {
-    subs.delete(cb);
-    if (subs.size === 0 && timer) {
-      clearInterval(timer);
-      timer = undefined;
-    }
-  };
-}
 
 const hhmm = (ms: number, utcOffset: number) => {
   const d = new Date(ms + utcOffset * 3_600_000);
   return `${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`;
 };
 
-export function TimeZones({ zones }: { zones: Dict["zones"] }) {
-  const t = useSyncExternalStore(
-    subscribe,
-    () => now,
-    () => 0,
-  );
+/** `only` shows a subset of the cities (by index), e.g. [0, 1, 8] on phones. */
+export function TimeZones({ zones, only, legend = true, className = "" }: { zones: Dict["zones"]; only?: number[]; legend?: boolean; className?: string }) {
+  const t = useNow();
   // Visitor's own UTC offset — only meaningful once we are in the browser.
   const mine = t ? -new Date(t).getTimezoneOffset() / 60 : null;
 
@@ -60,8 +34,9 @@ export function TimeZones({ zones }: { zones: Dict["zones"] }) {
   }, []);
 
   return (
-    <ol className="zones__list" ref={listRef} aria-label={zones.title}>
+    <ol className={`zones__list ${className}`} ref={listRef} aria-label={zones.title}>
       {zones.cities.map((city, i) => {
+        if (only && !only.includes(i)) return null;
         const utc = FIRST_UTC + i;
         const msk = utc - 3;
         const you = mine === utc;
@@ -82,10 +57,12 @@ export function TimeZones({ zones }: { zones: Dict["zones"] }) {
         );
       })}
       {/* Fills the twelfth slot of the 6×2 grid with the key to the markers. */}
+      {legend && (
       <li className="zone zone--legend" aria-hidden="true">
         <span>{zones.open}</span>
         <span>{zones.night}</span>
       </li>
+      )}
     </ol>
   );
 }

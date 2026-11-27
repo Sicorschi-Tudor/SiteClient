@@ -12,13 +12,13 @@ export function Signup({ locale, dict }: { locale: Locale; dict: Dict }) {
         <div className="signup__panel">
           <div className="signup__grid">
             <header className="signup__intro">
-              <p className="tag">{dict.form.eyebrow}</p>
               <p className="signup__zero" aria-hidden="true">
                 {rub("0\u00a0₽")}
               </p>
               <h2 id="zapis-title" className="h2">
                 {dict.form.title}
               </h2>
+              <p className="signup__flow">{dict.form.flow}</p>
             </header>
         <LeadForm
           locale={locale}

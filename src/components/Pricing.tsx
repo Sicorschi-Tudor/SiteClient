@@ -7,12 +7,12 @@ export function Pricing({ dict, otherLang }: { dict: Dict; otherLang: string }) 
   return (
     <section id="tarify" className="sec pricing" aria-labelledby="tarify-title">
       <div className="wrap">
-        <header className="sec__head rv">
-          <p className="tag">{p.eyebrow}</p>
-          <h2 id="tarify-title" className="h2">
+        <header className="sec__head">
+          <p className="pill-tag">{rub(p.eyebrow)}</p>
+          <h2 id="tarify-title" className="h2 reveal">
             {p.title}
           </h2>
-          <p className="sec__lead">{p.lead}</p>
+          {p.lead && <p className="sec__lead">{p.lead}</p>}
         </header>
         <div className="tickets">
           {p.plans.map((plan, i) => (

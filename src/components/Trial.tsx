@@ -11,9 +11,8 @@ export function Trial({ dict }: { dict: Dict }) {
   return (
     <section className="sec" aria-labelledby="trial-title">
       <div className="wrap">
-        <header className="sec__head rv">
-          <p className="tag">{t.eyebrow}</p>
-          <h2 id="trial-title" className="h2">
+        <header className="sec__head">
+          <h2 id="trial-title" className="h2 reveal">
             {t.title}
           </h2>
         </header>

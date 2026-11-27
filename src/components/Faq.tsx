@@ -6,9 +6,8 @@ export function Faq({ dict }: { dict: Dict }) {
   return (
     <section id="voprosy" className="sec faq" aria-labelledby="voprosy-title">
       <div className="wrap faq__grid">
-        <header className="faq__head rv">
-          <p className="tag">{f.eyebrow}</p>
-          <h2 id="voprosy-title" className="h2">
+        <header className="faq__head">
+          <h2 id="voprosy-title" className="h2 reveal">
             {f.title}
           </h2>
         </header>

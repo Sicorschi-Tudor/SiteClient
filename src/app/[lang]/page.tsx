@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { Clocks } from "@/components/Clocks";
 import { Benefits } from "@/components/Benefits";
 import { Faq } from "@/components/Faq";
 import { Footer } from "@/components/Footer";
@@ -46,7 +45,6 @@ export default async function Page({ params }: PageProps<"/[lang]">) {
       <Header locale={lang} dict={dict} />
       <main id="main">
         <Hero dict={dict} />
-        <Clocks zones={dict.zones} />
         <Trial dict={dict} />
         <Benefits dict={dict} otherLang={otherLang} />
         <Kinetic rows={dict.kinetic} />
