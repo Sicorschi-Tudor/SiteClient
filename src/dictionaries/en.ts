@@ -32,7 +32,7 @@ export const en: Dict = {
     live: { now: "It’s", open: "for you — lessons are on", closed: "for you — lessons 7:00–23:00", fallback: "Lessons 7:00–23:00 in your time" },
     cta: "Book a trial lesson",
     kicker: "Online English school for adults",
-    h1: { lead: "English you", accent: "actually speak." },
+    h1: { lead: "Start speaking", accent: "English", rotate: ["at work", "when you travel", "in interviews", "without fear"] },
     lede: "One-to-one lessons with a teacher. Speaking practice from the first lesson — for work, travel and life.",
     ctaFree: "Book a free lesson",
     assure: { strong: "50 minutes", rest: "no commitment" },

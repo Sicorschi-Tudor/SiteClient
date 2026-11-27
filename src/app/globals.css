@@ -580,6 +580,47 @@ a {
   font-style: normal;
   color: var(--color-primary);
 }
+.hero__title > span {
+  display: block;
+}
+/* Rotating phrase on a coral speech-bubble slab: all variants share one grid cell,
+   so the slab is as wide as the longest one and the layout never jumps. */
+.hero__title .rot {
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  margin-top: 0.12em;
+  margin-left: -0.08em;
+  padding: 0.04em 0.16em 0.12em;
+  color: var(--white);
+}
+.rot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 0.24em;
+  background: var(--coral-500);
+  transform-origin: left;
+}
+.rot::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0.42em;
+  bottom: -0.2em;
+  width: 0.34em;
+  height: 0.24em;
+  background: var(--coral-500);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+.rot span {
+  grid-area: 1 / 1;
+  opacity: 0;
+}
+.rot span:first-child {
+  opacity: 1;
+}
 .hero__lede {
   max-width: 32rem;
   margin-top: 1.25rem;
@@ -3065,6 +3106,28 @@ html:has(.cookie) {
     animation: slide-q 260ms var(--ease-out);
   }
   /* hero: the speaking card floats in once; its voice line moves only while "playing" */
+  /* hero: the coral slab wipes in once, then the phrases take turns (first one visible at t=0 — LCP) */
+  .rot::before {
+    animation: wipe 600ms var(--ease-out) 150ms both;
+  }
+  .rot::after {
+    animation: fade-in 250ms var(--ease-out) 650ms both;
+  }
+  .rot span {
+    animation: rot 10s cubic-bezier(0.65, 0, 0.35, 1) infinite backwards;
+  }
+  .rot span:nth-child(1) {
+    animation-delay: -0.6s;
+  }
+  .rot span:nth-child(2) {
+    animation-delay: 1.9s;
+  }
+  .rot span:nth-child(3) {
+    animation-delay: 4.4s;
+  }
+  .rot span:nth-child(4) {
+    animation-delay: 6.9s;
+  }
   .speak {
     animation: rise-chat 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 350ms both;
   }

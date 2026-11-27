@@ -25,8 +25,16 @@ export function Hero({ dict }: { dict: Dict }) {
             </svg>
             {h.kicker}
           </p>
-          <h1 id="hero-title" className="hero__title">
-            {h.h1.lead} <em>{h.h1.accent}</em>
+          {/* Screen readers get one stable sentence; the rotating phrases are visual. */}
+          <h1 id="hero-title" className="hero__title" aria-label={`${h.h1.lead} ${h.h1.accent} ${h.h1.rotate[0]}`}>
+            <span aria-hidden="true">
+              {h.h1.lead} <em>{h.h1.accent}</em>
+            </span>
+            <span className="rot" aria-hidden="true">
+              {h.h1.rotate.map((r) => (
+                <span key={r}>{r}</span>
+              ))}
+            </span>
           </h1>
           <p className="hero__lede">{h.lede}</p>
           <a className="btn btn--lg hero__cta" href="#zapis">
