@@ -1581,6 +1581,34 @@ a {
 .ticket--feat .ticket__top {
   margin-top: 0.75rem;
 }
+/* Old price struck through + discount chip, right above the real price */
+.ticket__was {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.ticket__was s {
+  text-decoration-line: line-through;
+  text-decoration-color: var(--coral-500);
+  text-decoration-thickness: 2px;
+}
+.ticket__off {
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--r-pill);
+  background: var(--coral-400);
+  color: var(--ink-900);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.ticket__was + .ticket__price {
+  margin-top: 0.35rem;
+}
 .ticket__price {
   display: flex;
   align-items: baseline;
@@ -1759,6 +1787,17 @@ a {
   .tickets > .ticket:not(.ticket--feat) .ticket__price {
     margin-top: 0.875rem;
     font-size: clamp(1.375rem, 15cqi, 2rem);
+  }
+  .ticket--feat .ticket__was {
+    margin-top: 0.875rem;
+  }
+  .tickets > .ticket:not(.ticket--feat) .ticket__was {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+  }
+  .tickets > .ticket:not(.ticket--feat) .ticket__off {
+    font-size: 0.6875rem;
+    padding: 0.1rem 0.4rem;
   }
   .tickets > .ticket:not(.ticket--feat) .ticket__price small,
   .tickets > .ticket:not(.ticket--feat) .ticket__per {

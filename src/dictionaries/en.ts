@@ -180,6 +180,9 @@ export const en: Dict = {
     eyebrow: "Trial — 0 ₽",
     title: "Pricing with no small print",
     lead: "",
+    was: "was",
+    now: "now",
+    off: "−20%",
     perMonth: "per month",
     tag: "recommended",
     choose: "Choose",
@@ -190,6 +193,7 @@ export const en: Dict = {
         name: "Group",
         gloss: "группа",
         price: "6 400",
+        oldPrice: "8 000",
         perLesson: "800 ₽ per lesson",
         features: [
           "8 lessons a month, 50 minutes each",
@@ -203,6 +207,7 @@ export const en: Dict = {
         name: "One-to-one",
         gloss: "один на один",
         price: "12 800",
+        oldPrice: "16 000",
         perLesson: "1 600 ₽ per lesson",
         features: [
           "8 lessons a month, 50 minutes each",
@@ -216,6 +221,7 @@ export const en: Dict = {
         name: "Intensive",
         gloss: "интенсив",
         price: "21 600",
+        oldPrice: "27 000",
         perLesson: "1 800 ₽ per lesson",
         features: [
           "12 one-to-one lessons a month",

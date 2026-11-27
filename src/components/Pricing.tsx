@@ -23,7 +23,15 @@ export function Pricing({ dict, otherLang }: { dict: Dict; otherLang: string }) 
                   {i === 1 && <span className="ticket__tag">{p.tag}</span>}
                 </p>
                 <h3 className="ticket__name h3">{plan.name}</h3>
+                <p className="ticket__was">
+                  <s>
+                    <span className="sr-only">{p.was} </span>
+                    {rub(`${plan.oldPrice.replace(" ", "\u00a0")}\u00a0₽`)}
+                  </s>
+                  <span className="ticket__off">{p.off}</span>
+                </p>
                 <p className="ticket__price">
+                  <span className="sr-only">{p.now} </span>
                   <span>{rub(`${plan.price.replace(" ", "\u00a0")}\u00a0₽`)}</span>
                   <small>{p.perMonth}</small>
                 </p>

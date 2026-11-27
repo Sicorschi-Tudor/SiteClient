@@ -183,6 +183,9 @@ export const ru = {
     eyebrow: "Пробный — 0 ₽",
     title: "Тарифы без мелкого шрифта",
     lead: "",
+    was: "было",
+    now: "сейчас",
+    off: "−20%",
     perMonth: "в месяц",
     tag: "рекомендуем",
     choose: "Выбрать",
@@ -193,6 +196,7 @@ export const ru = {
         name: "Группа",
         gloss: "group",
         price: "6 400",
+        oldPrice: "8 000",
         perLesson: "800 ₽ за урок",
         features: [
           "8 уроков в месяц по 50 минут",
@@ -206,6 +210,7 @@ export const ru = {
         name: "Один на один",
         gloss: "one-to-one",
         price: "12 800",
+        oldPrice: "16 000",
         perLesson: "1 600 ₽ за урок",
         features: [
           "8 уроков в месяц по 50 минут",
@@ -219,6 +224,7 @@ export const ru = {
         name: "Интенсив",
         gloss: "intensive",
         price: "21 600",
+        oldPrice: "27 000",
         perLesson: "1 800 ₽ за урок",
         features: [
           "12 уроков один на один в месяц",
@@ -227,7 +233,7 @@ export const ru = {
           "отчёт о прогрессе раз в месяц",
         ],
       },
-    ] as { id: PlanId; name: string; gloss: string; price: string; perLesson: string; features: string[] }[],
+    ] as { id: PlanId; name: string; gloss: string; price: string; oldPrice: string; perLesson: string; features: string[] }[],
   },
   form: {
     eyebrow: "Запись",
