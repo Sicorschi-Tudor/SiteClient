@@ -1,7 +1,9 @@
 import type { Dict } from "@/dictionaries";
 import { Arrow, Check } from "./Icons";
+import { LessonTimer } from "./LessonTimer";
 import { LevelRail } from "./LevelRail";
 import { MotionToggle } from "./MotionToggle";
+import { VoicePrint } from "./VoicePrint";
 
 export function Hero({ dict }: { dict: Dict }) {
   const h = dict.hero;
@@ -44,6 +46,7 @@ export function Hero({ dict }: { dict: Dict }) {
             </div>
           </div>
 
+          {/* The "desk" plane and the soft light sit behind the card (see .lesson in globals.css). */}
           <div className="lesson">
             <div className="lesson__top">
               <span className="avatar" aria-hidden="true">
@@ -51,22 +54,16 @@ export function Hero({ dict }: { dict: Dict }) {
               </span>
               <p className="lesson__who">
                 <b>
-                  {e.teacher} · {e.role}
+                  {e.teacher}
+                  <span className="lesson__role"> · {e.role}</span>
                 </b>
                 <span className="live">{e.live}</span>
               </p>
-              <span className="wave" aria-hidden="true">
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-                <i />
-              </span>
+              <LessonTimer />
               <MotionToggle labels={{ pause: h.pause, play: h.play }} />
             </div>
             <div className="lesson__body">
+              <VoicePrint />
               <p className="bubble">
                 <b lang="en">{e.question}</b>
                 <small lang="ru">{e.questionTr}</small>

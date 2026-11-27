@@ -22,6 +22,7 @@ export function PlanTicket({ id, featured, labels, children }: Props) {
   const selected = plan === id;
   const [stub, list] = children;
 
+
   return (
     <article
       className={`ticket rv${featured ? " ticket--feat" : ""}`}

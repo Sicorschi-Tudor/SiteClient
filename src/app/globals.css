@@ -505,6 +505,24 @@ a {
   padding-block: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(3rem, 2rem + 5vw, 6rem);
   overflow-x: clip;
 }
+/* Two very soft washes of light: coral behind the lesson card, green at the top left. */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(56rem 56rem at 80% 72%, rgb(255 127 92 / 0.1), transparent 60%),
+    radial-gradient(75rem 75rem at 0% 0%, rgb(6 78 59 / 0.06), transparent 60%);
+  pointer-events: none;
+}
+@media (max-width: 47.999rem) {
+  .hero::before {
+    background:
+      radial-gradient(32rem 32rem at 70% 92%, rgb(255 127 92 / 0.1), transparent 60%),
+      radial-gradient(44rem 44rem at 0% 0%, rgb(6 78 59 / 0.06), transparent 60%);
+  }
+}
 /* The headline is the image: it spans the full grid, and its last line sits on a
    rounded coral highlight. */
 .hero__h1 {
@@ -518,6 +536,9 @@ a {
 .hero__h1 > span {
   display: block;
   white-space: nowrap;
+}
+.hero__h1 > span:nth-child(2) {
+  letter-spacing: -0.055em;
 }
 /* Rotating phrase: all variants share one grid cell, so the slab starts where the longest one would. */
 .rot {
@@ -537,6 +558,18 @@ a {
   border-radius: 0.24em;
   background: var(--color-accent);
   transform-origin: left;
+}
+/* The highlight is a speech bubble — the visitor's reply — with a small tail. */
+.rot::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0.42em;
+  bottom: -0.2em;
+  width: 0.34em;
+  height: 0.24em;
+  background: var(--color-accent);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 .rot span {
   grid-area: 1 / 1;
@@ -559,6 +592,7 @@ a {
 }
 .hero__act {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   gap: 1.25rem 2rem;
   margin-top: clamp(1.5rem, 2.5vw, 2.25rem);
@@ -567,9 +601,43 @@ a {
   flex: none;
 }
 .btn--lg {
-  min-height: 3.75rem;
-  padding-inline: 1.75rem;
+  min-height: 4rem;
+  padding-inline: 1.875rem;
   font-size: 1.0625rem;
+}
+/* "Join the call": a lit edge, a soft green glow, a sheen on hover, one coral ring on load. */
+.hero .btn--lg {
+  position: relative;
+  background-color: var(--button-bg);
+  background-image: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.16) 50%, transparent 65%);
+  background-size: 250% 100%;
+  background-position: 150% 0;
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    0 14px 28px -14px rgb(6 78 59 / 0.7);
+  transition:
+    background-color var(--dur-fast) linear,
+    background-position 600ms var(--ease-out),
+    scale 120ms var(--ease-out);
+}
+.hero .btn--lg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+}
+@media (hover: hover) {
+  .hero .btn--lg:hover {
+    background-color: var(--button-bg-hover);
+    background-image: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.16) 50%, transparent 65%);
+    background-position: -50% 0;
+  }
+}
+.hero .btn--lg:active {
+  scale: 0.97;
 }
 .hero__note {
   display: flex;
@@ -582,26 +650,99 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  white-space: nowrap;
+}
+@media (min-width: 25rem) {
+  .hero__note {
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+  .hero__note li + li {
+    margin-left: 0.875rem;
+    padding-left: 0.875rem;
+    border-left: 1px solid rgb(17 22 20 / 0.14);
+  }
 }
 .hero__note svg {
   color: var(--color-primary);
 }
 
-/* Lesson card — drawn like a real product screen: flat, precise, no tricks. */
+/* Lesson card — a live call window. On wide screens it rests on a "desk" plane
+   (the outer spread shadow) that gives the first screen depth. */
 .lesson {
   position: relative;
   width: 100%;
-  max-width: 28rem;
+  max-width: 30rem;
   background: var(--white);
   border-radius: var(--r-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow:
+    0 0 0 1px rgb(6 78 59 / 0.08),
+    0 1px 2px rgb(6 78 59 / 0.06),
+    0 30px 60px -20px rgb(6 78 59 / 0.25);
+}
+@media (min-width: 64rem) {
+  .lesson {
+    box-shadow:
+      0 0 0 1px rgb(6 78 59 / 0.08),
+      0 1px 2px rgb(6 78 59 / 0.06),
+      0 30px 60px -20px rgb(6 78 59 / 0.25),
+      0 0 0 1.5rem #e8ece6;
+  }
 }
 .lesson__top {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 1.25rem;
+  min-height: 3.5rem;
+  padding: 0.625rem 1rem 0.625rem 1.25rem;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  background: rgb(6 78 59 / 0.04);
   border-bottom: 1px solid var(--color-border);
+}
+/* "00:07 / 50:00" */
+.call-timer {
+  margin-left: auto;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--r-pill);
+  background: var(--white);
+  box-shadow: inset 0 0 0 1px rgb(6 78 59 / 0.1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.call-timer span {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+/* narrow phones: one tidy line — just the name and the running time */
+@media (max-width: 29.999rem) {
+  .call-timer span,
+  .lesson__role {
+    display: none;
+  }
+  .lesson__top {
+    gap: 0.625rem;
+    padding-left: 1rem;
+  }
+}
+/* Voiceprint: 24 bars shaped like speech. */
+.voice {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 2rem;
+  margin-bottom: 1rem;
+  color: var(--color-primary);
+}
+.voice i {
+  flex: 1;
+  max-width: 3px;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: currentColor;
+  transform: scaleY(var(--h, 0.5));
+  opacity: 0.85;
 }
 .avatar {
   display: grid;
@@ -629,33 +770,7 @@ a {
 .live {
   font-size: 0.8125rem;
   color: var(--mint-600);
-}
-/* Voice level meter: someone is speaking right now. */
-.wave {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  height: 1.5rem;
-  margin-left: auto;
-  color: var(--color-primary);
-}
-.wave i {
-  width: 3px;
-  height: 100%;
-  border-radius: var(--r-pill);
-  background: currentColor;
-  transform: scaleY(0.35);
-}
-.wave i:nth-child(2),
-.wave i:nth-child(6) {
-  transform: scaleY(0.6);
-}
-.wave i:nth-child(3),
-.wave i:nth-child(5) {
-  transform: scaleY(0.85);
-}
-.wave i:nth-child(4) {
-  transform: scaleY(1);
+  white-space: nowrap;
 }
 .pause {
   display: grid;
@@ -699,11 +814,28 @@ a {
 .bubble--me {
   margin: 0.75rem 0 0 auto;
   border-radius: 1.25rem 1.25rem 0.375rem 1.25rem;
-  background: var(--color-primary);
-  color: var(--white);
+  background: rgb(255 127 92 / 0.14);
+  box-shadow: inset 0 0 0 1px rgb(255 127 92 / 0.35);
+  color: var(--ink-900);
 }
 .bubble--me small {
-  color: rgb(255 255 255 / 0.92);
+  color: var(--ink-700);
+}
+/* "typing…" bubble: hidden in the finished state, shown once during the intro */
+.typing {
+  grid-area: 1 / 1;
+  justify-self: end;
+  align-self: start;
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.95rem 1.05rem;
+  visibility: hidden;
+}
+.typing i {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: rgb(6 78 59 / 0.45);
 }
 .rail {
   display: flex;
@@ -784,6 +916,39 @@ a {
   .rail__opt:not(:has(input:checked)):hover {
     background: var(--green-50);
   }
+}
+/* A1 → chosen level */
+.rail__track {
+  display: block;
+  height: 4px;
+  margin-top: 0.75rem;
+  border-radius: var(--r-pill);
+  background: var(--mist-200);
+  overflow: hidden;
+}
+.rail__track::before {
+  content: "";
+  display: block;
+  width: var(--lv, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary);
+  transition: width 400ms var(--ease-out);
+}
+.rail:has(input[value="a1"]:checked) {
+  --lv: 20%;
+}
+.rail:has(input[value="a2"]:checked) {
+  --lv: 40%;
+}
+.rail:has(input[value="b1"]:checked) {
+  --lv: 60%;
+}
+.rail:has(input[value="b2"]:checked) {
+  --lv: 80%;
+}
+.rail:has(input[value="c1"]:checked) {
+  --lv: 100%;
 }
 .rail__hint {
   margin-top: 0.7rem;
@@ -1433,15 +1598,29 @@ a {
   font-weight: 500;
   letter-spacing: 0.02em;
 }
+/* "Recommended" sits on the card's top edge, like a ribbon. */
 .ticket__tag {
-  padding: 0.3rem 0.75rem;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  translate: -50% -50%;
+  padding: 0.45rem 1.1rem;
   border-radius: var(--r-pill);
   background: var(--coral-400);
   color: var(--ink-900);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px -6px rgb(17 22 20 / 0.35);
 }
 .ticket__name {
+  margin-top: 0.75rem;
+}
+/* leave room under the "recommended" ribbon */
+.ticket--feat .ticket__top {
   margin-top: 0.75rem;
 }
 .ticket__price {
@@ -1519,15 +1698,135 @@ a {
   background: var(--coral-400);
   color: var(--ink-900);
 }
+/* Desktop: a fan of cards. The recommended plan stands in front; the other two sit
+   behind it, slightly turned and lowered. They overlap it only by their own empty
+   padding, so every word on every card stays readable. */
 @media (min-width: 64rem) {
   .tickets {
-    grid-template-columns: repeat(3, 1fr);
-    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 0;
+    padding-block: 2.5rem 1.5rem;
+    isolation: isolate;
+  }
+  .tickets > .ticket {
+    transform-origin: 50% 100%;
+  }
+  .tickets > .ticket:not(.ticket--feat) {
+    z-index: 1;
+    padding-block: calc(var(--card-pad) + 0.25rem);
+  }
+  .tickets > .ticket:first-child {
+    transform: translateX(1.75rem) translateY(1.75rem) rotate(-3.5deg) scale(0.96);
+  }
+  .tickets > .ticket:last-child {
+    transform: translateX(-1.75rem) translateY(1.75rem) rotate(3.5deg) scale(0.96);
+  }
+  .tickets > .ticket--feat {
+    z-index: 2;
+    padding-block: calc(var(--card-pad) + 1rem);
+    transform: translateY(-0.5rem);
+    box-shadow:
+      0 40px 70px -30px rgb(6 78 59 / 0.55),
+      var(--shadow-md);
+  }
+  .tickets > .ticket--feat[data-selected="true"] {
+    box-shadow:
+      0 0 0 3px var(--coral-400),
+      0 40px 70px -30px rgb(6 78 59 / 0.55);
+  }
+  /* Pointing at a side card straightens it and brings it to the front. */
+  @media (hover: hover) {
+    .tickets > .ticket:first-child:hover,
+    .tickets > .ticket:last-child:hover {
+      z-index: 3;
+      transform: translateY(0.5rem) rotate(0deg) scale(1);
+    }
+    .tickets > .ticket:first-child:hover {
+      transform: translateX(1rem) translateY(0.5rem) rotate(0deg) scale(1);
+    }
+    .tickets > .ticket:last-child:hover {
+      transform: translateX(-1rem) translateY(0.5rem) rotate(0deg) scale(1);
+    }
   }
 }
+/* Phones and tablets: all three plans on one screen, no swiping. The recommended plan
+   spans the full width in front; the other two sit side by side underneath it, in a
+   compact form, tucked slightly under its bottom edge and turned a little. */
 @media (max-width: 63.999rem) {
+  .tickets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.625rem;
+    max-width: 40rem;
+    margin-inline: auto;
+    padding-top: 1rem;
+  }
   .ticket--feat {
+    grid-column: 1 / -1;
     order: -1;
+    z-index: 2;
+  }
+  .tickets > .ticket:not(.ticket--feat) {
+    z-index: 1;
+    margin-top: -1.75rem;
+    padding: calc(1.75rem + clamp(0.875rem, 3vw, 1.25rem)) clamp(0.875rem, 3vw, 1.25rem) clamp(0.875rem, 3vw, 1.25rem);
+    transform-origin: 50% 0;
+  }
+  .tickets > .ticket:first-child {
+    transform: rotate(-2deg);
+  }
+  .tickets > .ticket:last-child {
+    transform: rotate(2deg);
+  }
+  /* the recommended card is a little tighter on phones, so all three fit on one screen */
+  .ticket--feat {
+    padding: clamp(1.25rem, 4vw, 1.75rem);
+  }
+  .ticket--feat .ticket__price {
+    margin-top: 1rem;
+  }
+  .ticket--feat .ticket__body {
+    gap: 1.25rem;
+    margin-top: 1.125rem;
+    padding-top: 0.875rem;
+  }
+  .ticket--feat .ticket__list li {
+    padding-block: 0.3rem;
+  }
+  /* compact contents of the two smaller cards */
+  .tickets > .ticket:not(.ticket--feat) .ticket__name {
+    margin-top: 0.25rem;
+    font-size: 1.0625rem;
+  }
+  .tickets > .ticket:not(.ticket--feat) .ticket__price {
+    margin-top: 0.875rem;
+    font-size: clamp(1.375rem, 15cqi, 2rem);
+  }
+  .tickets > .ticket:not(.ticket--feat) .ticket__price small,
+  .tickets > .ticket:not(.ticket--feat) .ticket__per {
+    font-size: 0.8125rem;
+  }
+  .tickets > .ticket:not(.ticket--feat) .ticket__body {
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+  }
+  .tickets > .ticket:not(.ticket--feat) .ticket__list li {
+    grid-template-columns: 1.25rem 1fr;
+    padding-block: 0.3rem;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+  }
+  .tickets > .ticket:not(.ticket--feat) .ticket__list li::before {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin-top: 0.15rem;
+  }
+  .tickets > .ticket:not(.ticket--feat) .ticket__cta {
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
   }
 }
 
@@ -2363,7 +2662,7 @@ html:has(.cookie) {
 
   /* 1. Rotating phrase. Negative delay: the first phrase is already visible at t=0 (it is part of the LCP). */
   .rot span {
-    animation: rot 10s var(--ease-out) infinite backwards;
+    animation: rot 10s cubic-bezier(0.65, 0, 0.35, 1) infinite backwards;
   }
   .rot span:nth-child(1) {
     animation-delay: -0.6s;
@@ -2386,29 +2685,53 @@ html:has(.cookie) {
     animation: rise 450ms var(--ease-out) 250ms both;
   }
   .lesson .bubble:not(.bubble--me) {
-    animation: rise 300ms var(--ease-out) 650ms both;
+    animation: rise-chat 420ms cubic-bezier(0.2, 0.8, 0.2, 1) 300ms both;
+  }
+  .rot::after {
+    animation: fade-in 250ms var(--ease-out) 650ms both;
+  }
+  /* the voiceprint speaks once (and again on every level change) */
+  .voice i {
+    animation: speak 900ms ease-in-out calc(300ms + var(--d)) both;
+  }
+  /* "typing…" between the question and the first answer */
+  .rail:not(:has(input:checked)) .typing {
+    animation: typing-show 800ms linear 750ms forwards;
+  }
+  .typing i {
+    animation: typing-dot 900ms ease-in-out infinite;
+  }
+  .typing i:nth-child(2) {
+    animation-delay: 150ms;
+  }
+  .typing i:nth-child(3) {
+    animation-delay: 300ms;
+  }
+  /* one coral ring around the CTA, then stillness */
+  .hero .btn--lg::after {
+    animation: ring 900ms ease-out 1.2s both;
   }
 
   /* 3. Self-playing demo: until the visitor picks a level, the card cycles through all five answers. */
   .rail:not(:has(input:checked)) .rail__ex {
     visibility: hidden;
     opacity: 0;
-    animation: demo 15s var(--ease-out) 1.1s infinite both;
+    animation: demo 15s var(--ease-out) 1.6s infinite both;
   }
   .rail:not(:has(input:checked)) .rail__opt {
-    animation: demo-opt 15s linear 1.1s infinite both;
+    animation: demo-opt 15s linear 1.6s infinite both;
   }
   .rail:not(:has(input:checked)) :is(.rail__ex, .rail__opt):nth-child(2) {
-    animation-delay: 4.1s;
+    animation-delay: 4.6s;
   }
   .rail:not(:has(input:checked)) :is(.rail__ex, .rail__opt):nth-child(3) {
-    animation-delay: 7.1s;
+    animation-delay: 7.6s;
   }
   .rail:not(:has(input:checked)) :is(.rail__ex, .rail__opt):nth-child(4) {
-    animation-delay: 10.1s;
+    animation-delay: 10.6s;
   }
   .rail:not(:has(input:checked)) :is(.rail__ex, .rail__opt):nth-child(5) {
-    animation-delay: 13.1s;
+    animation-delay: 13.6s;
   }
   /* Hover, focus or the pause button: stop the demo on the default answer (never on a half-faded one). */
   :is(.rail:is(:hover, :focus-within), .hero[data-paused="true"] .rail):not(:has(input:checked)) :is(.rail__ex, .rail__opt) {
@@ -2419,32 +2742,10 @@ html:has(.cookie) {
     opacity: 1;
   }
   /* WCAG 2.2.2: every looping animation in the hero can be paused. */
-  .hero[data-paused="true"] :is(.rot span, .wave i) {
+  .hero[data-paused="true"] :is(.rot span, .voice i, .typing i) {
     animation-play-state: paused;
   }
 
-  /* Voice meter + typing dots keep the card alive. */
-  .wave i {
-    animation: wave 1.1s ease-in-out infinite alternate;
-  }
-  .wave i:nth-child(2) {
-    animation-delay: -0.35s;
-  }
-  .wave i:nth-child(3) {
-    animation-delay: -0.7s;
-  }
-  .wave i:nth-child(4) {
-    animation-delay: -0.2s;
-  }
-  .wave i:nth-child(5) {
-    animation-delay: -0.9s;
-  }
-  .wave i:nth-child(6) {
-    animation-delay: -0.5s;
-  }
-  .wave i:nth-child(7) {
-    animation-delay: -0.05s;
-  }
 
   /* Scroll-linked pieces: only where the browser can drive animation from scroll position. */
   @supports (animation-timeline: view()) {
@@ -2488,7 +2789,46 @@ html:has(.cookie) {
       transition:
         opacity var(--dur-fast) linear,
         border-color var(--dur-fast) linear,
-        box-shadow var(--dur-base) var(--ease-out);
+        box-shadow var(--dur-base) var(--ease-out),
+        transform 450ms var(--ease-out);
+    }
+  }
+
+  /* Phones: the two smaller cards slide down from under the recommended one. */
+  @media (max-width: 63.999rem) {
+    @supports (animation-timeline: view()) {
+      .tickets > .ticket:not(.ticket--feat) {
+        animation: tuck-out linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 70%;
+      }
+    }
+  }
+
+  /* Pricing fan: as the cards scroll into view, the two side plans slide out from
+     behind the recommended one. Driven by scroll position, not a timer. The keyframes
+     use the individual translate/rotate/scale properties, which stack on top of the
+     resting `transform`, so the hover effect keeps working once the fan is open. */
+  @media (min-width: 64rem) {
+    @supports (animation-timeline: view()) {
+      .tickets {
+        view-timeline-name: --fan;
+      }
+      .tickets > .ticket:first-child {
+        animation: fan-left linear both;
+        animation-timeline: --fan;
+        animation-range: entry 20% cover 42%;
+      }
+      .tickets > .ticket:last-child {
+        animation: fan-right linear both;
+        animation-timeline: --fan;
+        animation-range: entry 20% cover 42%;
+      }
+      .tickets > .ticket--feat {
+        animation: fan-front linear both;
+        animation-timeline: --fan;
+        animation-range: entry 10% cover 30%;
+      }
     }
   }
 
@@ -2544,7 +2884,7 @@ html:has(.cookie) {
 @keyframes rot {
   0% {
     opacity: 0;
-    transform: translateY(40%);
+    transform: translateY(70%);
   }
   4%,
   22% {
@@ -2555,15 +2895,65 @@ html:has(.cookie) {
   25%,
   100% {
     opacity: 0;
-    transform: translateY(-40%);
+    transform: translateY(-70%);
   }
 }
-@keyframes wave {
-  from {
+/* bars: rest → spoken peak (with a coral playhead) → rest */
+@keyframes speak {
+  0% {
     transform: scaleY(0.2);
   }
-  to {
-    transform: scaleY(1);
+  45% {
+    transform: scaleY(calc(var(--h, 0.5) * 1.15));
+    color: var(--coral-400);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(var(--h, 0.5));
+  }
+}
+@keyframes rise-chat {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+@keyframes typing-show {
+  0%,
+  99% {
+    visibility: visible;
+    opacity: 1;
+  }
+  100% {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+@keyframes typing-dot {
+  0%,
+  60%,
+  100% {
+    translate: 0 0;
+    opacity: 0.5;
+  }
+  30% {
+    translate: 0 -3px;
+    opacity: 1;
+  }
+}
+@keyframes ring {
+  0% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgb(255 127 92 / 0.55);
+  }
+  100% {
+    opacity: 0;
+    box-shadow: 0 0 0 12px rgb(255 127 92 / 0);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
 }
 @keyframes playhead {
@@ -2593,6 +2983,34 @@ html:has(.cookie) {
 @keyframes glyph {
   from {
     scale: 0.8;
+  }
+}
+/* Phones: start tucked under the front card, square, slightly smaller. */
+@keyframes tuck-out {
+  from {
+    translate: 0 -55%;
+    rotate: 0deg;
+    scale: 0.92;
+  }
+}
+/* Side cards start hidden behind the front card, square to the viewer. */
+@keyframes fan-left {
+  from {
+    translate: 88% 0;
+    rotate: 3.5deg;
+    scale: 0.88;
+  }
+}
+@keyframes fan-right {
+  from {
+    translate: -88% 0;
+    rotate: -3.5deg;
+    scale: 0.88;
+  }
+}
+@keyframes fan-front {
+  from {
+    scale: 0.94;
   }
 }
 @keyframes wipe {

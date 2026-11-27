@@ -16,6 +16,12 @@ export function LevelRail({ entry }: { entry: Dict["hero"]["entry"] }) {
   return (
     <div className="rail">
       <div className="rail__exs">
+      {/* "typing…" — shown once, between the teacher's question and the first answer */}
+      <p className="bubble bubble--me typing" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </p>
       {LEVELS.map((lv) => (
         <div className="rail__ex" data-lv={lv} key={lv}>
           <p className="bubble bubble--me">
@@ -46,6 +52,8 @@ export function LevelRail({ entry }: { entry: Dict["hero"]["entry"] }) {
           </label>
         ))}
       </div>
+      {/* progress from A1 to the chosen level */}
+      <span className="rail__track" aria-hidden="true" />
       <p className="rail__hint">{entry.railHint}</p>
       </div>
     </div>
